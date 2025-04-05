@@ -1,0 +1,111 @@
+
+2024-03-13 14:00_trungnt
+	- Đổi tên file cấu hình sitebuilder -> siteconfig
+	- Đổi tên thư mục deployment -> conf
+	- Sửa lại cơ chế auto deploy và cơ chế load properties: 
+	- Thêm mới các file chạy: portal267.sh và portal267.bat
+	- Tách file file properties dưới dạng nhiều profile
+
+2024-02-22 09:40_VietDD
+    - Bổ sung tính năng và sửa lỗi đọc profiles : InMemoryUserDetailsManagerConfig.java
+    - Bổ sung file application-ext.properties
+2024-02-22 15:40_VietDD
+    - Bổ sung thư mục profiles
+    - Cập nhật thông tin cấu hình bootstrap.yml
+2024-03-04 13:30_VietDD
+    - Xóa file startup.sh, startup.bat, thêm mới các file portal267.bat, portal267.sh
+    - Cập nhật README.md theo thông tin file khởi chạy mới
+2024-03-13 14:30_trungnt
+	- Xóa file startup.sh và startup.bat
+2024-03-13 14:30_trungnt
+	- Cập nhật profile. spring.thymeleaf.prefix
+2024-03-13 15:00_trungnt
+	- Thêm theme mặc định
+	- Thêm file html common
+2024-03-13 16:59_NhuNX
+    - merge code + fix conflict
+2024-03-15 14:00_VietDD
+    - Bổ sung tính năng làm giàu dữ liệu configuration để trả cho FE
+2024-03-18 15:00_trungnt
+	- Điều chỉnh SecurityConfig: Thêm cấu hinh xac thuc, cau hinh role
+	- Cập nhật ViewRenderController: Bỏ cơ chế xác thực
+	- Bổ sung cơ chế validate token
+
+2024-03-19 15:09_NhuNX
+    - thêm login bằng keycloak
+    - bổ sung checktoken, lấy thông tin ngdung set vào context
+2024-03-20 13:59_NhuNX
+    - chuyển sang sử dụng flex-grpc
+2024-03-20 17:02_NhuNX
+    - xóa package exception dùng lib common ex
+2024-03-22 15:58_NhuNX
+    - chuyển api đăng nhập sang package khác
+    - xóa file siteconfig k dùng
+    - thêm JWTIssuersConfig
+2024-03-22 17:12_NhuNX
+    - rollback application.properties
+2024-03-25 11:00_trungnt
+	- Bổ sung GatewayPathFilter
+	- Bổ sung OsgiBundleManager và OSGIConfig
+	
+2024-03-25 14:00_trungnt
+	- Refactor
+2024-03-26 14:00_trungnt
+	- Refactor: remove login code
+	- Revert application.properties
+2024-03-28 16:00_trungnt
+	- Thêm xử lý plugin
+	- Chỉnh sửa CustomAuthentication
+2024-03-28 16:12_trungnt
+	- Sửa PortalUtil: convertMapToJson
+2024-03-29 09:00_trungnt
+	- Sửa AuthenticationController: Thêm ràng buộc @ConditionalOnBean
+2024-03-29 12:00_trungnt
+	- Sửa antru build
+2024-03-29 14:30_VietDD
+    - Bổ sung phương thức đăng nhập cho plugin
+    - Chỉnh sửa cơ chế lấy thông tin cho config
+2024-04-02 08:30_VietDD
+    - Merge code
+    - Sửa lại nghiệp vụ Login cho plugin
+2024-04-02 13:00_trungnt
+    - Sửa portal267.sh: Điều chỉnh classpath
+    - add application-prod. properties
+    - Gen lại plugin
+2024-04-02 15:40_trungnt
+	- Chỉnh lại các plugin service: build kèm các thư viện dependency
+	- Sửa classpath trong portal.sh: Chỉ load các service.jar
+	- Đặt log
+2024-04-02 16:12_trungnt
+	- Set lai siteconfig khi render
+2024-04-03 09:00_VietDD
+    - Set thông tin đăng nhập cho FE
+    - Thêm api logout
+2024-04-03 14:00_trungnt
+    - Cập nhật CustomAuthentication: Sửa hàm doLogin 
+2024-04-03 14:30_VietDD
+    - Chỉnh sửa logout, SecurityContext
+2024-04-03 15:30_VietDD
+    - Sửa lỗi Resp Code 200 nhưng body 401
+2024-04-03 16:30_trungnt
+    - Cập nhật PageModel: add ModuleDirectly property
+    - Sửa file siteconfi.json 
+2024-04-03 17:00_trungnt
+    - Cập nhật DisplayBuilder: Sửa cơ chế templatePath
+2024-05-02 14:00_VietDD
+    - Bổ sung thông tin superadmin và cơ quan chủ quản trong UserContextDetail
+2024-05-03 11:00_trungnt
+	- Hotfix ExternalPropertyCrawSchedule: return khi prefix = null
+    - Thêm log tối ưu hiệu năng
+2024-05-03 13:00_VietDD
+    - Cài đặt lưu cache với publickey
+    - Tôi ưu getHeader trong CustomProxy
+2024-05-03 17:30_VietDD
+    - Cập nhật cấu hình Cài đặt Cache
+
+
+
+
+
+
+

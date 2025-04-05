@@ -1,0 +1,7 @@
+{
+  "jsFolder": "js",
+  "imgFolder": "images",
+  "fontFolder": "fonts",
+  "cssFolder": "css",
+  "templates": ["index"]
+}

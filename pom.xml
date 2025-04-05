@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.fds.flex.core.portal</groupId>
+	<artifactId>portal32</artifactId>
+	<version>1.0.0</version>
+	<name>portal32</name>
+	<description>Portal</description>
+	<properties>
+		<java.version>21</java.version>
+		<grpc.version>1.41.0</grpc.version>
+		<protobuf.version>3.18.0</protobuf.version>
+		<start-class>com.fds.flex.core.portal.PortalApplication</start-class>
+		<spring-cloud.version>2023.0.0</spring-cloud.version>
+	</properties>
+	<dependencies>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>io.pebbletemplates</groupId>
+			<artifactId>pebble</artifactId>
+			<version>3.2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.pebbletemplates</groupId>
+			<artifactId>pebble-spring-boot-starter</artifactId>
+			<version>3.2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+		</dependency>
+	
+		<!-- Lettuce Redis Client -->
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20231013</version>
+		</dependency>
+
+		<dependency>
+            <groupId>com.fds.flex.common</groupId>
+            <artifactId>flex-common2</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Apache HttpClient 5 -->
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+
+		<!-- JWT Support -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Thêm Netty rõ ràng -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>21</source>
+					<target>21</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+							<target>
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/bin" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/conf" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/deploy" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/resources" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/plugins" />
+								<copy
+									todir="${basedir}/target/deploy/${artifactId}/bin">
+									<!-- <fileset dir="${basedir}/target"
+									includes="${artifactId}-${version}.jar" /> -->
+									<fileset dir="${basedir}/src/main/resources">
+										<include name="application.properties" />
+										<include
+											name="application-prod.properties" />
+										<include name="flexplatform.p12" />
+									</fileset>
+									<fileset dir="${basedir}"
+										includes="portal325.sh" />
+									<fileset dir="${basedir}"
+										includes="portal325.bat" />
+									<fileset dir="${basedir}"
+										includes="flex-tools.sh" />
+									<fileset dir="${basedir}"
+										includes="Dockerfile" />
+								</copy>
+								<copy
+									todir="${basedir}/target/deploy/${artifactId}/conf">
+									<fileset dir="${basedir}/conf" includes="*" />
+
+									<!-- 
+						        	<fileset dir="${basedir}/src/main/resources">
+						        		<include name="logback-spring.xml" />
+						        	</fileset>
+						        	 -->
+								</copy>
+								<copy
+									todir="${basedir}/target/deploy/${artifactId}/resources">
+									<fileset dir="${basedir}/resources" />
+								</copy>
+								<copy
+									todir="${basedir}/target/deploy/${artifactId}/plugins">
+									<fileset dir="${basedir}/plugins"
+										includes="*" />
+								</copy>
+								<copy
+									file="${project.build.directory}/${artifactId}-${version}.jar"
+									tofile="${project.build.directory}/deploy/${artifactId}/bin/${artifactId}.jar" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/logs" />
+								<zip destfile="${basedir}/target/deploy.zip"
+									basedir="${basedir}/target/deploy" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
