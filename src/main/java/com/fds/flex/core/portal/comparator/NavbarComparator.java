@@ -22,5 +22,4 @@ public class NavbarComparator implements Comparator<DisplayNavModel> {
 			return -1;
 		}
 	}
-
 }

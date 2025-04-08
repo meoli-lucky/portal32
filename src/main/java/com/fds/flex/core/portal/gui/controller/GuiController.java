@@ -38,7 +38,7 @@ public class GuiController {
                 .autoEscaping(true)
                 .build();
 
-        PebbleTemplate template = engine.getTemplate("themes/default/index"); // KHÔNG có .html ở đây
+        PebbleTemplate template = pebbleEngine.getTemplate("themes/default/index"); // KHÔNG có .html ở đây
 
         Map<String, Object> context = new HashMap<>();
         context.put("title", "Pebble từ ổ đĩa ngoài");

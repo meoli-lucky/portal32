@@ -14,7 +14,7 @@ import org.springframework.web.reactive.result.view.ViewResolver;
 @Slf4j
 public class PebbleEngineBuilder {
 
-    @Value("${flexcore.portal.web.static-resource.location}")
+    @Value("${flexcore.portal.web.static-resource.dir}")
     private String templatePath;
 
     @Value("${spring.pebble.cache:true}")
@@ -32,6 +32,7 @@ public class PebbleEngineBuilder {
     public PebbleEngine pebbleEngine() {
         return new PebbleEngine.Builder()
                 .loader(loader())
+                .autoEscaping(true)
                 .cacheActive(pebbleCache)
                 .build();
     }
