@@ -12,6 +12,7 @@ import com.fds.flex.core.portal.security.CustomUserDetails;
 import com.fds.flex.core.portal.util.PortalConstant;
 import com.fds.flex.core.portal.util.PortalUtil;
 import io.pebbletemplates.pebble.PebbleEngine;
+import io.pebbletemplates.pebble.loader.FileLoader;
 import io.pebbletemplates.pebble.template.PebbleTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
@@ -24,8 +25,10 @@ import org.springframework.web.reactive.result.view.Rendering;
 import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Map;
@@ -40,97 +43,124 @@ public class ViewRenderController {
 	@Autowired
 	PebbleEngine templateEngine;
 
-	@GetMapping(value = {"/viewRender"})
+	@GetMapping(value = { "/viewRender" })
 	@ResponseBody
-	public Mono<Rendering> page(ServerWebExchange exchange) {
-		return Mono.defer(() -> {
-			String servletPath = exchange.getRequest().getPath().value();
-			String originContextPath = exchange.getAttribute("originContextPath");
-			SiteModel site = exchange.getAttribute("site");
+	public Mono<String> page(ServerWebExchange exchange) {
+		String servletPath = exchange.getRequest().getPath().value();
+		String originContextPath = exchange.getAttribute("originContextPath");
+		SiteModel site = exchange.getAttribute("site");
 
-			log.info("servletPath: {}", servletPath);
+		log.info("servletPath: {}", servletPath);
 
-			if (site == null) {
-				log.warn("not found site");
-				return Mono.just(Rendering.view("commons/404").build());
-			}
+		if (site == null) {
+			log.warn("not found site");
+			return Mono.just(render404());
+		}
 
-			if (site.getSitePaths().contains(originContextPath)) {
-				DisplayModel displayModel = site.getDisplayModelMap().get(originContextPath);
+		if (site.getSitePaths().contains(originContextPath)) {
+			DisplayModel displayModel = site.getDisplayModelMap().get(originContextPath);
 
-				// Khởi tạo với giá trị mặc định vì không còn sử dụng Spring Security MVC
-				boolean isSignedIn = false;
-				CustomUserDetails customUserDetails = new CustomUserDetails();
+			// Khởi tạo với giá trị mặc định vì không còn sử dụng Spring Security MVC
+			boolean isSignedIn = false;
+			CustomUserDetails customUserDetails = new CustomUserDetails();
 
-				displayModel.setSignedIn(isSignedIn);
-				displayModel.setUserContext(customUserDetails);
+			displayModel.setSignedIn(isSignedIn);
+			displayModel.setUserContext(customUserDetails);
 
-				if (Validator.isNotNull(customUserDetails)) {
-					List<String> attribute = Arrays.asList("username", "email", "fullName", "roles");
+			if (Validator.isNotNull(customUserDetails)) {
+				List<String> attribute = Arrays.asList("username", "email", "fullName", "roles");
 
-					try {
-						JSONObject jsonObject = new JSONObject(new ObjectMapper().writeValueAsString(displayModel.getUserContext()));
-						JSONObject result = new JSONObject();
-						AtomicBoolean isSuperAdmin = new AtomicBoolean(false);
-						attribute.forEach(e -> {
-							result.put(e, jsonObject.get(e));
-							if (e.equals("roles")) {
-								JSONArray jsonArray = jsonObject.getJSONArray(e);
-								for (int i = 0; i < jsonArray.length(); i++) {
-									String role = jsonArray.getString(i);
-									if (role.equalsIgnoreCase("superadmin")) {
-										isSuperAdmin.set(true);
-									}
+				try {
+					JSONObject jsonObject = new JSONObject(
+							new ObjectMapper().writeValueAsString(displayModel.getUserContext()));
+					JSONObject result = new JSONObject();
+					AtomicBoolean isSuperAdmin = new AtomicBoolean(false);
+					attribute.forEach(e -> {
+						result.put(e, jsonObject.get(e));
+						if (e.equals("roles")) {
+							JSONArray jsonArray = jsonObject.getJSONArray(e);
+							for (int i = 0; i < jsonArray.length(); i++) {
+								String role = jsonArray.getString(i);
+								if (role.equalsIgnoreCase("superadmin")) {
+									isSuperAdmin.set(true);
 								}
 							}
-						});
-						result.put("isSuperAdmin", isSuperAdmin);
-
-						if (Validator.isNotNull(displayModel.getUserContext().getProfiles())
-								&& displayModel.getUserContext().getProfiles().has("CanBo")
-								&& displayModel.getUserContext().getProfiles().getJSONObject("CanBo").has("CoQuanChuQuan")
-								&& Validator.isNotNull(displayModel.getUserContext().getProfiles().getJSONObject("CanBo"))
-								&& Validator.isNotNull(displayModel.getUserContext().getProfiles().getJSONObject("CanBo").getJSONObject("CoQuanChuQuan"))) {
-							result.put("CoQuanChuQuan", displayModel.getUserContext().getProfiles().getJSONObject("CanBo").getJSONObject("CoQuanChuQuan"));
 						}
+					});
+					result.put("isSuperAdmin", isSuperAdmin);
 
-						displayModel.setUserContextDetail(result.toString());
-					} catch (Exception e) {
-						log.error("Error while processing user details", e);
-						displayModel.setUserContextDetail(StringPool.DOUBLE_QUOTE);
+					if (Validator.isNotNull(displayModel.getUserContext().getProfiles())
+							&& displayModel.getUserContext().getProfiles().has("CanBo")
+							&& displayModel.getUserContext().getProfiles().getJSONObject("CanBo").has("CoQuanChuQuan")
+							&& Validator.isNotNull(displayModel.getUserContext().getProfiles().getJSONObject("CanBo"))
+							&& Validator.isNotNull(displayModel.getUserContext().getProfiles().getJSONObject("CanBo")
+									.getJSONObject("CoQuanChuQuan"))) {
+						result.put("CoQuanChuQuan", displayModel.getUserContext().getProfiles().getJSONObject("CanBo")
+								.getJSONObject("CoQuanChuQuan"));
 					}
-				} else {
+
+					displayModel.setUserContextDetail(result.toString());
+				} catch (Exception e) {
+					log.error("Error while processing user details", e);
 					displayModel.setUserContextDetail(StringPool.DOUBLE_QUOTE);
 				}
+			} else {
+				displayModel.setUserContextDetail(StringPool.DOUBLE_QUOTE);
+			}
 
-				if (Validator.isNotNull(PortalUtil._EXTERNAL_PROPERTY_JSON)) {
-					displayModel.setConfigurations(PortalUtil._EXTERNAL_PROPERTY_JSON);
-				}
+			if (Validator.isNotNull(PortalUtil._EXTERNAL_PROPERTY_JSON)) {
+				displayModel.setConfigurations(PortalUtil._EXTERNAL_PROPERTY_JSON);
+			}
 
-				String page = displayModel.getTemplatePath();
+			String page = displayModel.getTemplatePath();
 
-				if (GetterUtil.getBoolean(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_THEME_PRELOAD))) {
-					String tmp = PortalConstant.WORK_FOLDER + StringPool.SLASH + PortalConstant.RUNTIME_FOLDER
-							+ StringPool.SLASH + displayModel.getThemeId() + StringPool.SLASH + displayModel.getPageId();
+			if (GetterUtil.getBoolean(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_THEME_PRELOAD))) {
+				String tmp = PortalConstant.WORK_FOLDER + StringPool.SLASH + PortalConstant.RUNTIME_FOLDER
+						+ StringPool.SLASH + displayModel.getThemeId() + StringPool.SLASH + displayModel.getPageId();
 
-					log.info("======>>> Tmp: {}", tmp);
+				log.info("======>>> Tmp: {}", tmp);
 
-					return Mono.just(Rendering.view(tmp).modelAttribute("display", displayModel).build());
-				}
-
-				log.info("======>>> Page: {}", page);
-
-				// Sử dụng templateEngine để render template Pebble
 				return Mono.fromCallable(() -> {
+					try {
+						PebbleTemplate template = templateEngine.getTemplate(tmp);
+						StringWriter writer = new StringWriter();
+						template.evaluate(writer, Map.of("display", displayModel));
+						return writer.toString();
+					} catch (IOException e) {
+						log.error("Error rendering 404 page", e);
+						return render404();
+					}
+				});
+			}
+
+			log.info("======>>> Page: {}", page);
+
+			return Mono.fromCallable(() -> {
+				try {
 					PebbleTemplate template = templateEngine.getTemplate(page);
 					StringWriter writer = new StringWriter();
 					template.evaluate(writer, Map.of("display", displayModel));
 					return writer.toString();
-				}).map(html -> Rendering.view("pebble").modelAttribute("html", html).build());
-			} else {
-				log.warn("not found resource: {}", servletPath);
-				return Mono.just(Rendering.view("commons/404").build());
-			}
-		});
+				} catch (IOException e) {
+					log.error("Error rendering 404 page", e);
+					return render404();
+				}
+			});
+		} else {
+			log.warn("not found resource: {}", servletPath);
+			return Mono.just(render404());
+		}
+	}
+
+	private String render404() {
+		try {
+			PebbleTemplate template = templateEngine.getTemplate("commons/404");
+			StringWriter writer = new StringWriter();
+			template.evaluate(writer, new HashMap<>());
+			return writer.toString();
+		} catch (IOException e) {
+			log.error("Error rendering 404 page", e);
+			return "Page not found";
+		}
 	}
 }

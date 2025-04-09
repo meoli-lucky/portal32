@@ -47,8 +47,14 @@ public class ContextPathWebFilter implements WebFilter {
                 return forward(exchange, chain, contextPath, siteModel);
             }
         }
-
-        return chain.filter(exchange);
+        
+        return chain.filter(exchange)
+                .onErrorResume(throwable -> {
+                    log.error("Error occurred during request processing", throwable);
+                    //exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
+                    //return Mono.empty();
+                    return forwardError(exchange, chain, contextPath);
+                });
     }
 
     private Mono<Void> forward(ServerWebExchange exchange, WebFilterChain chain, 
@@ -61,6 +67,15 @@ public class ContextPathWebFilter implements WebFilter {
         return chain.filter(
             exchange.mutate()
                 .request(exchange.getRequest().mutate().path("/viewRender").build())
+                .build()
+        );
+    }
+
+    private Mono<Void> forwardError(ServerWebExchange exchange, WebFilterChain chain, 
+                              String contextPath) {
+        return chain.filter(
+            exchange.mutate()
+                .request(exchange.getRequest().mutate().path("/error").build())
                 .build()
         );
     }
