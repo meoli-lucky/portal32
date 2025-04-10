@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 
-import com.fds.flex.core.portal.config.SSLContextConfig;
 import com.fds.flex.core.portal.security.ReactiveCustomAuthentication;
 import org.json.JSONObject;
 

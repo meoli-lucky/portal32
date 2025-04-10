@@ -1,60 +1,95 @@
 package com.fds.flex.core.portal.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 
 import com.fds.flex.common.ultility.Validator;
+import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.core.portal.gui.builder.DisplayBuilder;
 import com.fds.flex.core.portal.gui.model.SiteModel;
 import com.fds.flex.core.portal.security.ReactiveCustomAuthentication;
 import com.fds.flex.core.portal.util.PortalUtil;
+import com.fds.flex.core.portal.model.GatewayModel;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
-@Component
 @Order(2)
 @Slf4j
-public class ContextPathWebFilter implements WebFilter {
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+@ConditionalOnProperty(name = "flexcore.portal.web.context-path-filter.enabled", havingValue = "true", matchIfMissing = true)
+public class GlobalWebFilter implements WebFilter {
 
     @Autowired
     ReactiveCustomAuthentication reactiveCustomAuthentication;
-    
+
     @Autowired
     DisplayBuilder displayBuilder;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         String requestUri = exchange.getRequest().getURI().getPath();
-        String contextPath = PortalUtil.getContextPathFromRequestUri(requestUri);
+      
+        log.info("GlobalWebFilter::run ::url::" + requestUri);
 
-        log.info("ContextPathWebFilter::run ::url::" + requestUri);
+        // Lấy thông tin về loại path từ attributes
+        String pathType = (String) exchange.getAttributes().get("pathType");
 
-        if (PortalUtil._SITE_CONTEXT_MAP.containsKey(contextPath)) {
-            SiteModel siteModel = PortalUtil._SITE_CONTEXT_MAP.get(contextPath);
+        if ("GATEWAY".equals(pathType)) {
+            String requestContextPath = PortalUtil.getContextPathFromRequestUri(requestUri);
+            String servicePath = StringPool.BLANK;
+            GatewayModel gatewayModel = null;
+           
+            for (String context : PortalUtil._GATEWAY_CONTEXT_MAP.keySet()) {
+                if (PortalUtil.matchContextPaths(requestContextPath, context)) {
+                    String tmp = requestContextPath.replace(context, StringPool.BLANK);
+                    if (PortalUtil.matchContextPaths(tmp, PortalUtil._GATEWAY_CONTEXT_MAP.get(context).getResources())) {
+                        servicePath = tmp;
+                    }
+                    gatewayModel = PortalUtil._GATEWAY_CONTEXT_MAP.get(context);
+                    break;
+                }
+            }
+            if(gatewayModel == null){
+                return forwardError(exchange, chain, requestContextPath);
+            }
+            return forwardToGateway(exchange, chain, gatewayModel, servicePath);
+
+        } else if ("SITE".equals(pathType)) {
+            SiteModel siteModel = PortalUtil._SITE_CONTEXT_MAP.get(requestUri);
 
             // Kiểm tra xem path có cần bảo mật không
-            if (siteModel.getSecureSitePaths().contains(contextPath)) {
+            if (siteModel.getSecureSitePaths().contains(requestUri)) {
                 // Kiểm tra quyền truy cập
-                return checkPermission(exchange, chain, contextPath, siteModel);
+                return checkPermission(exchange, chain, requestUri, siteModel);
             } else {
                 // Chuyển hướng đến ViewRenderController
-                return forward(exchange, chain, contextPath, siteModel);
+                return forward(exchange, chain, requestUri, siteModel);
             }
         }
         
         return chain.filter(exchange)
                 .onErrorResume(throwable -> {
                     log.error("Error occurred during request processing", throwable);
-                    //exchange.getResponse().setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR);
-                    //return Mono.empty();
-                    return forwardError(exchange, chain, contextPath);
+                    return forwardError(exchange, chain, requestUri);
                 });
+    }
+
+    private Mono<Void> forwardToGateway(ServerWebExchange exchange, WebFilterChain chain, GatewayModel gatewayModel, String servicePath) {
+        // Tạo path mới cho gateway endpoint
+        String newPath = gatewayModel.getEndpoint() + servicePath + (exchange.getRequest().getURI().getQuery() != null ? "?" + exchange.getRequest().getURI().getQuery() : "");
+        
+        return chain.filter(
+            exchange.mutate()
+                .request(exchange.getRequest().mutate().path(newPath).build())
+                .build()
+        );
     }
 
     private Mono<Void> forward(ServerWebExchange exchange, WebFilterChain chain, 
