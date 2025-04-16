@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fds.flex.common.ultility.GetterUtil;
 import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.core.portal.property.PropKey;
-import com.fds.flex.core.portal.util.DeploymentConstant;
 import com.fds.flex.core.portal.util.FileUtil;
+import com.fds.flex.core.portal.util.PortalConstant;
+
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -41,8 +42,8 @@ public class WatchProcessFile {
 
 							String fileName = deploymentFileRelativePath.getFileName().toString();
 
-							if (type.equals(DeploymentConstant.MODULE_DEPLOY_FOLDER)
-									|| type.equals(DeploymentConstant.THEME_DEPLOY_FOLDER)) {
+							if (type.equals(PortalConstant.MODULE_DEPLOY_FOLDER)
+									|| type.equals(PortalConstant.THEME_DEPLOY_FOLDER)) {
 								Path installationDirAbsolutePath = Paths.get(URI.create(installDir)).toAbsolutePath();
 								Path installationFileAbsolutePath = installationDirAbsolutePath.resolve(fileName);
 
@@ -63,7 +64,7 @@ public class WatchProcessFile {
 								updateSiteConfig(fileName.replace(".zip", "").replace(".war", ""),
 										resourceFileAbsolutePath, type);
 
-							} else if (type.equals(DeploymentConstant.SITE_DEPLOY_FOLDER)) {
+							} else if (type.equals(PortalConstant.SITE_DEPLOY_FOLDER)) {
 
 								String siteConfigDir = GetterUtil
 										.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_CONF_DIR))
@@ -163,18 +164,18 @@ public class WatchProcessFile {
 			// Lấy dữ liệu từ file JSON ban đầu map vào đối tượng mới
 			ObjectNode jsonObject = objectMapper.createObjectNode();
 
-			if (type.equals(DeploymentConstant.THEME_DEPLOY_FOLDER)) {
+			if (type.equals(PortalConstant.THEME_DEPLOY_FOLDER)) {
 				jsonObject.put("id", deploymentName);
-				jsonObject.put("relativePath", DeploymentConstant.THEME_INSTALLATION_FOLDER.concat(StringPool.SLASH)
+				jsonObject.put("relativePath", PortalConstant.THEME_INSTALLATION_FOLDER.concat(StringPool.SLASH)
 						.concat(deploymentName).concat(StringPool.SLASH));
 				jsonObject.put("imgFolder", jsonInput.get("imgFolder").asText());
 				jsonObject.put("jsFolder", jsonInput.get("jsFolder").asText());
 				jsonObject.put("fontFolder", jsonInput.get("fontFolder").asText());
 				jsonObject.put("cssFolder", jsonInput.get("cssFolder").asText());
 				jsonObject.set("templates", jsonInput.get("templates"));
-			} else if (type.equals(DeploymentConstant.MODULE_DEPLOY_FOLDER)) {
+			} else if (type.equals(PortalConstant.MODULE_DEPLOY_FOLDER)) {
 				jsonObject.put("id", deploymentName);
-				jsonObject.put("relativePath", DeploymentConstant.MODULE_INSTALLATION_FOLDER.concat(StringPool.SLASH)
+				jsonObject.put("relativePath", PortalConstant.MODULE_INSTALLATION_FOLDER.concat(StringPool.SLASH)
 						.concat(deploymentName).concat(StringPool.SLASH));
 				jsonObject.put("resourceConfigFile", "resources.json");
 
@@ -187,36 +188,36 @@ public class WatchProcessFile {
 				return;
 			}
 			// Check dữ liệu thêm mới
-			if (resourceFileAbsolutePath.toString().contains(DeploymentConstant.MODULE_INSTALLATION_FOLDER)) {
-				if (jsonData.has(DeploymentConstant.MODULE_INSTALLATION_FOLDER)
-						&& jsonData.get(DeploymentConstant.MODULE_INSTALLATION_FOLDER).isArray()) {
+			if (resourceFileAbsolutePath.toString().contains(PortalConstant.MODULE_INSTALLATION_FOLDER)) {
+				if (jsonData.has(PortalConstant.MODULE_INSTALLATION_FOLDER)
+						&& jsonData.get(PortalConstant.MODULE_INSTALLATION_FOLDER).isArray()) {
 					List<String> idList = FileUtil
-							.extractIdsFromJsonArray(jsonData.get(DeploymentConstant.MODULE_INSTALLATION_FOLDER));
+							.extractIdsFromJsonArray(jsonData.get(PortalConstant.MODULE_INSTALLATION_FOLDER));
 					// check id
 					if (idList.contains(deploymentName)) {
 						FileUtil.removeElementFromJsonArrayById(
-								(ArrayNode) jsonData.get(DeploymentConstant.MODULE_INSTALLATION_FOLDER),
+								(ArrayNode) jsonData.get(PortalConstant.MODULE_INSTALLATION_FOLDER),
 								deploymentName);
 					}
-					((ArrayNode) jsonData.get(DeploymentConstant.MODULE_INSTALLATION_FOLDER)).add(jsonObject);
+					((ArrayNode) jsonData.get(PortalConstant.MODULE_INSTALLATION_FOLDER)).add(jsonObject);
 				} else {
 					ArrayNode moduleTargetArray = objectMapper.createArrayNode().add(jsonObject);
-					((ObjectNode) jsonData).set(DeploymentConstant.MODULE_INSTALLATION_FOLDER, moduleTargetArray);
+					((ObjectNode) jsonData).set(PortalConstant.MODULE_INSTALLATION_FOLDER, moduleTargetArray);
 				}
 				objectMapper.writeValue(outputFile, jsonData);
-			} else if (resourceFileAbsolutePath.toString().contains(DeploymentConstant.THEME_INSTALLATION_FOLDER)) {
-				if (jsonData.has(DeploymentConstant.THEME_INSTALLATION_FOLDER)
-						&& jsonData.get(DeploymentConstant.THEME_INSTALLATION_FOLDER).isArray()) {
+			} else if (resourceFileAbsolutePath.toString().contains(PortalConstant.THEME_INSTALLATION_FOLDER)) {
+				if (jsonData.has(PortalConstant.THEME_INSTALLATION_FOLDER)
+						&& jsonData.get(PortalConstant.THEME_INSTALLATION_FOLDER).isArray()) {
 					List<String> idList = FileUtil
-							.extractIdsFromJsonArray(jsonData.get(DeploymentConstant.THEME_INSTALLATION_FOLDER));
+							.extractIdsFromJsonArray(jsonData.get(PortalConstant.THEME_INSTALLATION_FOLDER));
 					if (idList.contains(deploymentName)) {
 						FileUtil.removeElementFromJsonArrayById(
-								(ArrayNode) jsonData.get(DeploymentConstant.THEME_INSTALLATION_FOLDER), deploymentName);
+								(ArrayNode) jsonData.get(PortalConstant.THEME_INSTALLATION_FOLDER), deploymentName);
 					}
-					((ArrayNode) jsonData.get(DeploymentConstant.THEME_INSTALLATION_FOLDER)).add(jsonObject);
+					((ArrayNode) jsonData.get(PortalConstant.THEME_INSTALLATION_FOLDER)).add(jsonObject);
 				} else {
 					ArrayNode themeTargetArray = objectMapper.createArrayNode().add(jsonObject);
-					((ObjectNode) jsonData).set(DeploymentConstant.THEME_INSTALLATION_FOLDER, themeTargetArray);
+					((ObjectNode) jsonData).set(PortalConstant.THEME_INSTALLATION_FOLDER, themeTargetArray);
 				}
 				objectMapper.writeValue(outputFile, jsonData);
 			} else {

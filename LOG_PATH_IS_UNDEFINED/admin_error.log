@@ -1,0 +1,2 @@
+[FLEXCORE]:2025-04-16 23:21:21.679 [host]:trungnt [level]:ERROR [appname]:admin [other]:   2276 [threadid]:restartedMain [package]:com.fds.flex.core.portal.config.DisplayConfig [method]:initPortalDisplay [line]:299 - [message]:\
+[FLEXCORE]:2025-04-16 23:21:43.923 [host]:trungnt [level]:ERROR [appname]:admin [other]:   2310 [threadid]:restartedMain [package]:com.fds.flex.core.portal.config.DisplayConfig [method]:initPortalDisplay [line]:299 - [message]:\

@@ -164,7 +164,22 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	<profiles>
+		<profile>
+			<id>guest</id>
+			<properties>
+				<start-class>com.fds.flex.app.guest.Application</start-class>
+				<spring-boot.run.profiles>guest</spring-boot.run.profiles>
+			</properties>
+		</profile>
+		<profile>
+			<id>admin</id>
+			<properties>
+				<start-class>com.fds.flex.app.admin.Application</start-class>
+				<spring-boot.run.profiles>admin</spring-boot.run.profiles>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>

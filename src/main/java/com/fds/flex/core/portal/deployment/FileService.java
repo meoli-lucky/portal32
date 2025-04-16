@@ -1,7 +1,7 @@
 package com.fds.flex.core.portal.deployment;
 
 import com.fds.flex.core.portal.model.DeploymentPath;
-import com.fds.flex.core.portal.util.DeploymentConstant;
+import com.fds.flex.core.portal.util.PortalConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,18 +32,18 @@ public class FileService {
     public void watchFolderModule() {
         WatchProcessFile doDepoy = new WatchProcessFile();
         log.info("Watching module: {}", deploymentPath.getFileSourcePathModule());
-        doDepoy.watchFolder(deploymentPath.getFileSourcePathModule(), deploymentPath.getFileTargetPathModule(), DeploymentConstant.MODULE_DEPLOY_FOLDER);
+        doDepoy.watchFolder(deploymentPath.getFileSourcePathModule(), deploymentPath.getFileTargetPathModule(), PortalConstant.MODULE_DEPLOY_FOLDER);
     }
 
     public void watchFolderTheme() {
         WatchProcessFile doDepoy = new WatchProcessFile();
         log.info("Watching theme: {}", deploymentPath.getFileSourcePathTheme());
-        doDepoy.watchFolder(deploymentPath.getFileSourcePathTheme(), deploymentPath.getFileTargetPathTheme(), DeploymentConstant.THEME_DEPLOY_FOLDER);
+        doDepoy.watchFolder(deploymentPath.getFileSourcePathTheme(), deploymentPath.getFileTargetPathTheme(), PortalConstant.THEME_DEPLOY_FOLDER);
     }
 
     public void watchFolderSite() {
         WatchProcessFile doDepoy = new WatchProcessFile();
         log.info("Watching json file: {}", deploymentPath.getFileSourcePathSite());
-        doDepoy.watchFolder(deploymentPath.getFileSourcePathSite(), null, DeploymentConstant.SITE_DEPLOY_FOLDER);
+        doDepoy.watchFolder(deploymentPath.getFileSourcePathSite(), null, PortalConstant.SITE_DEPLOY_FOLDER);
     }
 }

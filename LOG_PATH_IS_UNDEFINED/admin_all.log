@@ -1,0 +1,90 @@
+2025-04-17 00:19:05.016 INFO  admin    3375277 [File Watcher] org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 213 class path changes (213 additions, 0 deletions, 0 modifications)
+2025-04-17 00:19:05.240 INFO  admin    3375501 [restartedMain] com.fds.flex.app.admin.Application - Starting Application using Java 21.0.2 with PID 21796 (D:\Work\Projects\java\springboot\portal\portal32\target\classes started by trungnt in D:\Work\Projects\java\springboot\portal\portal32)
+2025-04-17 00:19:05.245 DEBUG admin    3375506 [restartedMain] com.fds.flex.app.admin.Application - Running with Spring Boot v3.2.5, Spring v6.1.6
+2025-04-17 00:19:05.245 INFO  admin    3375506 [restartedMain] com.fds.flex.app.admin.Application - The following 1 profile is active: "admin"
+2025-04-17 00:19:05.592 INFO  admin    3375853 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-04-17 00:19:05.592 INFO  admin    3375853 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-04-17 00:19:05.601 INFO  admin    3375862 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2025-04-17 00:19:05.698 INFO  admin    3375959 [restartedMain] org.springframework.cloud.context.scope.GenericScope - BeanFactory id=e844c084-6a87-3d01-a88d-8f5ecafc2084
+2025-04-17 00:19:05.891 INFO  admin    3376152 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-04-17 00:19:05.893 INFO  admin    3376154 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-04-17 00:19:05.893 INFO  admin    3376154 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-04-17 00:19:05.895 INFO  admin    3376156 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-04-17 00:19:05.897 INFO  admin    3376158 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-04-17 00:19:05.897 INFO  admin    3376158 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-04-17 00:19:05.899 INFO  admin    3376160 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-04-17 00:19:05.905 INFO  admin    3376166 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-04-17 00:19:05.905 INFO  admin    3376166 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-04-17 00:19:05.905 INFO  admin    3376166 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-04-17 00:19:05.905 INFO  admin    3376166 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-17 00:19:05.908 INFO  admin    3376169 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-17 00:19:05.910 INFO  admin    3376171 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-04-17 00:19:05.919 INFO  admin    3376180 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-17 00:19:05.983 INFO  admin    3376244 [restartedMain] org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 371b7668-3101-459f-81da-b5c5a06b7f3f
+
+2025-04-17 00:19:06.061 WARN  admin    3376322 [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - Unable to start LiveReload server
+2025-04-17 00:19:06.117 INFO  admin    3376378 [restartedMain] org.springframework.boot.web.embedded.netty.NettyWebServer - Netty started on port 8080
+2025-04-17 00:19:06.130 INFO  admin    3376391 [restartedMain] com.fds.flex.app.admin.Application - Started Application in 0.99 seconds (process running for 3376.547)
+2025-04-17 00:19:06.136 INFO  admin    3376397 [restartedMain] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-17 00:19:14.825 INFO  admin    3385086 [File Watcher] org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1074 class path changes (1074 additions, 0 deletions, 0 modifications)
+2025-04-17 00:19:14.923 INFO  admin    3385184 [restartedMain] com.fds.flex.app.admin.Application - Starting Application using Java 21.0.2 with PID 21796 (D:\Work\Projects\java\springboot\portal\portal32\target\classes started by trungnt in D:\Work\Projects\java\springboot\portal\portal32)
+2025-04-17 00:19:14.923 DEBUG admin    3385184 [restartedMain] com.fds.flex.app.admin.Application - Running with Spring Boot v3.2.5, Spring v6.1.6
+2025-04-17 00:19:14.923 INFO  admin    3385184 [restartedMain] com.fds.flex.app.admin.Application - The following 1 profile is active: "admin"
+2025-04-17 00:19:15.050 INFO  admin    3385311 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-04-17 00:19:15.050 INFO  admin    3385311 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-04-17 00:19:15.053 INFO  admin    3385314 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 Redis repository interfaces.
+2025-04-17 00:19:15.085 INFO  admin    3385346 [restartedMain] org.springframework.cloud.context.scope.GenericScope - BeanFactory id=e844c084-6a87-3d01-a88d-8f5ecafc2084
+2025-04-17 00:19:15.223 INFO  admin    3385484 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-04-17 00:19:15.223 INFO  admin    3385484 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-04-17 00:19:15.223 INFO  admin    3385484 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-04-17 00:19:15.223 INFO  admin    3385484 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-04-17 00:19:15.232 INFO  admin    3385493 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-04-17 00:19:15.233 INFO  admin    3385494 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-17 00:19:15.257 INFO  admin    3385518 [restartedMain] org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 5ce4bc2a-9ca7-4bab-869b-c589c7ef8c5d
+
+2025-04-17 00:19:15.313 WARN  admin    3385574 [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - Unable to start LiveReload server
+2025-04-17 00:19:15.365 INFO  admin    3385626 [restartedMain] org.springframework.boot.web.embedded.netty.NettyWebServer - Netty started on port 8080
+2025-04-17 00:19:15.380 INFO  admin    3385641 [restartedMain] com.fds.flex.app.admin.Application - Started Application in 0.503 seconds (process running for 3385.795)
+2025-04-17 00:19:15.383 INFO  admin    3385644 [restartedMain] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-04-17 00:19:23.921 INFO  admin    3394182 [File Watcher] org.springframework.boot.devtools.autoconfigure.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2862 class path changes (1575 additions, 1287 deletions, 0 modifications)
+2025-04-17 00:19:24.011 INFO  admin    3394272 [restartedMain] com.fds.flex.app.admin.Application - Starting Application using Java 21.0.2 with PID 21796 (D:\Work\Projects\java\springboot\portal\portal32\target\classes started by trungnt in D:\Work\Projects\java\springboot\portal\portal32)
+2025-04-17 00:19:24.014 DEBUG admin    3394275 [restartedMain] com.fds.flex.app.admin.Application - Running with Spring Boot v3.2.5, Spring v6.1.6
+2025-04-17 00:19:24.014 INFO  admin    3394275 [restartedMain] com.fds.flex.app.admin.Application - The following 1 profile is active: "admin"
+2025-04-17 00:19:24.153 INFO  admin    3394414 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-04-17 00:19:24.153 INFO  admin    3394414 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-04-17 00:19:24.155 INFO  admin    3394416 [restartedMain] org.springframework.data.repository.config.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 Redis repository interfaces.
+2025-04-17 00:19:24.202 INFO  admin    3394463 [restartedMain] org.springframework.cloud.context.scope.GenericScope - BeanFactory id=e844c084-6a87-3d01-a88d-8f5ecafc2084
+2025-04-17 00:19:24.345 INFO  admin    3394606 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [After]
+2025-04-17 00:19:24.346 INFO  admin    3394607 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Before]
+2025-04-17 00:19:24.346 INFO  admin    3394607 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Between]
+2025-04-17 00:19:24.346 INFO  admin    3394607 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Cookie]
+2025-04-17 00:19:24.347 INFO  admin    3394608 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Header]
+2025-04-17 00:19:24.347 INFO  admin    3394608 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Host]
+2025-04-17 00:19:24.347 INFO  admin    3394608 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Method]
+2025-04-17 00:19:24.347 INFO  admin    3394608 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Path]
+2025-04-17 00:19:24.348 INFO  admin    3394609 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Query]
+2025-04-17 00:19:24.348 INFO  admin    3394609 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [ReadBody]
+2025-04-17 00:19:24.348 INFO  admin    3394609 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-17 00:19:24.349 INFO  admin    3394610 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-17 00:19:24.349 INFO  admin    3394610 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [Weight]
+2025-04-17 00:19:24.349 INFO  admin    3394610 [restartedMain] org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator - Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-17 00:19:24.373 INFO  admin    3394634 [restartedMain] org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 9c536dd3-193d-4757-81b9-73b44b7c3ef5
+
+2025-04-17 00:19:24.420 WARN  admin    3394681 [restartedMain] org.springframework.boot.devtools.autoconfigure.OptionalLiveReloadServer - Unable to start LiveReload server
+2025-04-17 00:19:24.452 INFO  admin    3394713 [restartedMain] org.springframework.boot.web.embedded.netty.NettyWebServer - Netty started on port 8080
+2025-04-17 00:19:24.464 INFO  admin    3394725 [restartedMain] com.fds.flex.app.admin.Application - Started Application in 0.495 seconds (process running for 3394.879)
+2025-04-17 00:19:24.467 INFO  admin    3394728 [restartedMain] org.springframework.boot.devtools.autoconfigure.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
