@@ -13,7 +13,6 @@ import com.fds.flex.common.ultility.Validator;
 import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.core.portal.gui.builder.DisplayBuilder;
 import com.fds.flex.core.portal.gui.model.SiteModel;
-import com.fds.flex.core.portal.security.ReactiveCustomAuthentication;
 import com.fds.flex.core.portal.util.PortalUtil;
 import com.fds.flex.core.portal.model.GatewayModel;
 
@@ -25,9 +24,6 @@ import reactor.core.publisher.Mono;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
 @ConditionalOnProperty(name = "flexcore.portal.web.context-path-filter.enabled", havingValue = "true", matchIfMissing = true)
 public class GlobalWebFilter implements WebFilter {
-
-    @Autowired
-    ReactiveCustomAuthentication reactiveCustomAuthentication;
 
     @Autowired
     DisplayBuilder displayBuilder;
@@ -120,9 +116,9 @@ public class GlobalWebFilter implements WebFilter {
         if (Validator.isNull(siteModel.getRoleMap().get(contextPath))) {
             return forward(exchange, chain, contextPath, siteModel);
         }
-
+        return forward(exchange, chain, contextPath, siteModel);
         // Chuyển sang kiểm tra quyền theo cách reactive
-        return reactiveCustomAuthentication.isAuthenticated(exchange)
+        /* return reactiveCustomAuthentication.isAuthenticated(exchange)
             .flatMap(isAuthenticated -> {
                 if (!isAuthenticated) {
                     log.info("Authentication failed for path: {}", contextPath);
@@ -140,6 +136,6 @@ public class GlobalWebFilter implements WebFilter {
                 }
                 
                 return forward(exchange, chain, contextPath, siteModel);
-            });
+            }); */
     }
 } 

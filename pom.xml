@@ -18,7 +18,7 @@
 		<java.version>21</java.version>
 		<grpc.version>1.41.0</grpc.version>
 		<protobuf.version>3.18.0</protobuf.version>
-		<start-class>com.fds.flex.core.portal.PortalApplication</start-class>
+		<start-class>com.fds.flex.app.web.Application</start-class>
 		<spring-cloud.version>2023.0.0</spring-cloud.version>
 	</properties>
 	<dependencies>
@@ -66,19 +66,17 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-		
-
+		<!-- R2DBC H2 Driver -->
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
-		</dependency>
-	
-		<!-- Lettuce Redis Client -->
-		<dependency>
-			<groupId>io.lettuce</groupId>
-			<artifactId>lettuce-core</artifactId>
+			<groupId>io.r2dbc</groupId>
+			<artifactId>r2dbc-h2</artifactId>
 		</dependency>
 
+		<!-- Spring Data R2DBC -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
 			<groupId>org.json</groupId>
@@ -151,6 +149,23 @@
 			<artifactId>spring-boot-starter-reactor-netty</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>jakarta.persistence</groupId>
+			<artifactId>jakarta.persistence-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -164,22 +179,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<profiles>
-		<profile>
-			<id>guest</id>
-			<properties>
-				<start-class>com.fds.flex.app.guest.Application</start-class>
-				<spring-boot.run.profiles>guest</spring-boot.run.profiles>
-			</properties>
-		</profile>
-		<profile>
-			<id>admin</id>
-			<properties>
-				<start-class>com.fds.flex.app.admin.Application</start-class>
-				<spring-boot.run.profiles>admin</spring-boot.run.profiles>
-			</properties>
-		</profile>
-	</profiles>
 	<build>
 		<plugins>
 			<plugin>

@@ -11,11 +11,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.CacheControl;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-import org.springframework.web.reactive.result.view.ViewResolver;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
-
 import com.fds.flex.common.ultility.GetterUtil;
 import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.common.ultility.string.StringUtil;
@@ -25,7 +20,6 @@ import com.fds.flex.core.portal.util.PortalUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 
 @Configuration
 @Order(Ordered.LOWEST_PRECEDENCE)

@@ -22,6 +22,7 @@ import com.fds.flex.core.portal.gui.model.ResourceModel;
 import com.fds.flex.core.portal.gui.model.SiteModel;
 import com.fds.flex.core.portal.gui.model.ThemeModel;
 import com.fds.flex.core.portal.property.PropKey;
+import com.fds.flex.core.portal.util.PortalConstant;
 import com.fds.flex.core.portal.util.PortalUtil;
 
 import lombok.Getter;
@@ -156,10 +157,14 @@ public class DisplayBuilder {
 						.pageTitle(page.getTitle()).logo(site.getHeader().getLogo())
 						.slogan(site.getHeader().getSlogan()).navs(navs).footer("").templateName(page.getTemplate())
 						.fragment(page.getFragment())
-						.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): theme.getRelativePath() + page.getTemplate())
+						//.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): theme.getRelativePath() + page.getTemplate())
+						//.templateAbsolutePath(GetterUtil
+						//		.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
+						//		+ StringPool.SLASH + theme.getRelativePath() + page.getTemplate() + ".html")
+						.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): PortalConstant.SITE_INSTALLATION_FOLDER + "/" + theme.getId() + "/" + page.getTemplate())
 						.templateAbsolutePath(GetterUtil
 								.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
-								+ StringPool.SLASH + theme.getRelativePath() + page.getTemplate() + ".html")
+								+ StringPool.SLASH + PortalConstant.SITE_INSTALLATION_FOLDER + "/" + theme.getId() + "/" + page.getTemplate() + ".html")
 						.resourceAbsolutePath(GetterUtil
 								.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
 								+ StringPool.SLASH)
@@ -247,10 +252,14 @@ public class DisplayBuilder {
 						.slogan(site.getHeader().getSlogan()).navs(navs).fragment(page.getFragment())
 						// .currentNav(getDisplayNav(navPath, navs))
 						.currentNav(navMap.get(navPath)).footer("").templateName(page.getTemplate())
-						.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): theme.getRelativePath() + page.getTemplate())
+						//.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): theme.getRelativePath() + page.getTemplate())
+						//.templateAbsolutePath(GetterUtil
+						//		.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
+						//		+ StringPool.SLASH + theme.getRelativePath() + page.getTemplate() + ".html")
+						.templatePath(page.isModuleDirectly() ? module.getRelativePath() + page.getTemplate(): PortalConstant.SITE_INSTALLATION_FOLDER + "/" + theme.getId() + "/" + page.getTemplate())
 						.templateAbsolutePath(GetterUtil
 								.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
-								+ StringPool.SLASH + theme.getRelativePath() + page.getTemplate() + ".html")
+								+ StringPool.SLASH + PortalConstant.SITE_INSTALLATION_FOLDER + "/" + theme.getId() + "/" + page.getTemplate() + ".html")
 						.resourceAbsolutePath(GetterUtil
 								.getString(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_STATIC_RESOURCE_DIR))
 								+ StringPool.SLASH)

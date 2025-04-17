@@ -6,11 +6,11 @@ import java.util.List;
 import javax.net.ssl.SSLContext;
 
 import com.fds.flex.core.portal.config.SSLContextConfig;
-import com.fds.flex.core.portal.security.ReactiveCustomAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
@@ -37,9 +37,6 @@ public class Portal267ApplicationListener implements ApplicationListener<Context
 	@Value("${flexcore.portal.gateway.config}")
 	String gatewayConfig;
 
-	@Autowired
-	ReactiveCustomAuthentication reactiveCustomAuthentication;
-
 	//@Autowired
 	//ForwardController forwardController;
 
@@ -55,10 +52,15 @@ public class Portal267ApplicationListener implements ApplicationListener<Context
 	@Autowired
 	GlobalEnvProperty globalEnvProperty;
 
+	private final DatabaseClient db;
+
+	public Portal267ApplicationListener(DatabaseClient db) {
+		this.db = db;
+	}
 
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-
+		db.sql("SELECT 1").fetch().first().subscribe();
 		if (Validator.isNotNull(gatewayConfig)) {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode nodes;

@@ -11,7 +11,7 @@
     <property name="LOG_FILE_TRACE" value="${LOG_PATH}/${springAppName:-general}_trace.log"/>
 	<property name="LOG_FILE_DEBUG" value="${LOG_PATH}/${springAppName:-general}_debug.log"/>
 	<property name="LOG_FILE_ERROR" value="${LOG_PATH}/${springAppName:-general}_error.log"/>
-	
+	<!--
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 	    <encoder>
 	        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${springAppName:-} %X{X-B3-TraceId:-} %X{X-B3-SpanId:-} %X{X-B3-ParentSpanId:-} %-4relative [%thread] %logger{255} - %msg%n
@@ -25,7 +25,7 @@
 	        </pattern>
 	    </encoder>
 	</appender>
-
+    -->
     <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="LOG_FILE_ALL">
         <file>${LOG_FILE_ALL}</file>
         <encoder>

@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLContext;
 
-import com.fds.flex.core.portal.security.ReactiveCustomAuthentication;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +31,6 @@ public class PortalUtil {
 	public static JWTIssuersConfig jwtIssuersConfig = null;
 
 	public static SSLContext sslContext = null;
-	public static ReactiveCustomAuthentication customAuthentication = null;
 
 	public final static String _CONTEXT_PATH_PATTEN = "(^/)[a-z0-9-/_]+";
 

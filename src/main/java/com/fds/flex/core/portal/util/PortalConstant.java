@@ -37,6 +37,7 @@ public class PortalConstant {
 	public static final String SITE_DEPLOY_FOLDER = "site";
 	public static final String MODULE_INSTALLATION_FOLDER = "modules";
     public static final String THEME_INSTALLATION_FOLDER = "themes";
+	public static final String SITE_INSTALLATION_FOLDER = "sites";
 
 	public static final String ACCEPT_ENCODING = "Accept-Encoding";
 

@@ -18,23 +18,34 @@
       "templates": [
         "index"
       ]
+    },
+    {
+      "id": "admin",
+      "relativePath": "themes/admin/",
+      "imgFolder": "images",
+      "jsFolder": "js",
+      "fontFolder": "fonts",
+      "cssFolder": "css",
+      "templates": [
+        "index"
+      ]
     }
   ],
   "modules": [],
   "sites": [
-  {
-      "id": "site3",
-      "context": "/group/2",
+    {
+      "id": "admin",
+      "context": "/site/admin",
       "root": true,
       "siteSecure": "page",
-      "themeId": "default",
+      "themeId": "admin",
       "moduleIds": [],
       "pages": [
         {
           "id": "home",
           "name": "Trang chủ",
           "title": "Portal - Home",
-          "path": "/",
+          "path": "/home",
           "target": "none",
           "moduleId": "",
           "moduleDirectly": "false",
@@ -42,80 +53,6 @@
           "secure": false,
           "roles": []
         },
-        {
-          "id": "welcome",
-          "name": "Giới thiệu",
-          "title": "Portal - Giới thiệu",
-          "path": "/welcome",
-          "target": "none",
-          "moduleId": "",
-          "fragment": "",
-          "template": "index",
-          "secure": true,
-          "roles": [
-            "admin",
-            "user"
-          ]
-        },
-        {
-          "id": "contact",
-          "name": "Liên hệ",
-          "title": "Portal - Liên hệ",
-          "path": "/contact",
-          "target": "none",
-          "moduleId": "",
-          "fragment": "",
-          "template": "index",
-          "secure": true,
-          "roles": [
-            "user"
-          ]
-        }
-      ],
-      "header": {
-        "logo": "",
-        "slogan": ""
-      },
-      "navbars": [
-        {
-          "id": "nav_home",
-          "pageId": "home",
-          "name": "Trang chủ",
-          "href": "/",
-          "followedParentHref": false,
-          "visible": true,
-          "target": "none",
-          "level": 0,
-          "seq": 1,
-          "hasChild": false,
-          "childrens": []
-        },
-        {
-          "id": "nav_welcome",
-          "pageId": "welcome",
-          "name": "Giới thiệu",
-          "href": "/gioi-thieu",
-          "followedParentHref": false,
-          "visible": true,
-          "target": "none",
-          "level": 0,
-          "seq": 2,
-          "secure": false,
-          "roles": [],
-          "hasChild": true,
-          "childrens": []
-        }
-      ],
-      "footed": {}
-    },
-    {
-      "id": "site2",
-      "context": "/group/1",
-      "root": true,
-      "siteSecure": "page",
-      "themeId": "default",
-      "moduleIds": [],
-      "pages": [
         {
           "id": "home",
           "name": "Trang chủ",
