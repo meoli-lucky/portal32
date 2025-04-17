@@ -6,16 +6,16 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-import java.util.Map;
-
 @Table("header")
 @Getter
 @Setter
-public class Headers {
+public class Header {
     @Id
     @Column("id")
-    private String id;
+    private Long id;
+
+    @Column("site_id")
+    private Long siteId;
 
     @Column("logo")
     private String logo;
@@ -23,6 +23,12 @@ public class Headers {
     @Column("slogan")
     private String slogan;
 
-    @Column("payload")
-    private String payload;
+    @Column("include_script")
+    private String includeScript;
+
+    @Column("include_style")
+    private String includeStyle;
+
+    @Column("include_content")
+    private String includeContent;
 } 

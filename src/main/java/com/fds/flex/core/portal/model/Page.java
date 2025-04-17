@@ -1,63 +1,54 @@
 package com.fds.flex.core.portal.model;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Entity
-@Table(name = "pages")
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+
+@Table(name = "page")
 @Getter
 @Setter
 public class Page {
     
     @Id
-    @Column(name = "id")
-    private String id;
+    @Column("id")
+    private Long id;
 
-    @Column(name = "site_id")
+    @Column("site_id")
     private Long siteId;
 
-    @Column(name = "name")
+    @Column("parent_id")
+    private Long parentId;
+
+    @Column("name")
     private String name;
 
-    @Column(name = "title")
+    @Column("title")
     private String title;
 
-    @Column(name = "path")
+    @Column("path")
     private String path;
 
-    @Column(name = "target")
-    private String target;
+    @Column("view_template_id")
+    private Long viewTemplateId;
 
-    @Column(name = "module_id")
-    private Long moduleId;
-
-    @Column(name = "template")
-    private String template;
-
-    @Column(name = "type")
-    private String type;
-
-    @Column(name = "fragment")
-    private String fragment;
-
-    @Column(name = "secure")
+    @Column("secure")
     private boolean secure;
 
-    @Column(name = "module_directly")
-    private boolean moduleDirectly;
+    @Column("include_content")
+    private String includeContent;
 
-    @OneToOne(mappedBy = "page", cascade = CascadeType.ALL)
-    private PageLayouts layout;
+    @Column("include_script")
+    private String includeScript;
 
-    @ElementCollection
-    @CollectionTable(name = "page_roles", joinColumns = @JoinColumn(name = "page_id"))
-    @Column(name = "role")
+    @Column("include_style")
+    private String includeStyle;
+
+    @Column("roles")
     private List<String> roles;
-
-    @ManyToOne
-    @JoinColumn(name = "site_id", insertable = false, updatable = false)
-    private Site site;
 } 

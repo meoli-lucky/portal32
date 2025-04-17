@@ -1,6 +1,8 @@
 package com.fds.flex.core.portal.model;
 
+import org.apache.hc.client5.http.entity.mime.Header;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
@@ -16,28 +18,37 @@ public class Site {
     @Id
     @Column("id")
     private Long id;
+    
+    @Column("site_name")
+    private String siteName;
 
-    @Column("context")
+    @Column("context_path")
     private String context;
 
-    @Column("root")
-    private boolean root;
+    @Column("private_site")
+    private boolean privateSite;
 
-    @Column("theme_id")
-    private String themeId;
+    @Column("spa_or_static")
+    private boolean spaOrStatic;
 
-    @Column("module_id")
-    private String moduleId;
+    @Column("description")
+    private String description;
 
-    @Column("pages")
-    private List<Pages> pages = new ArrayList<>();
+    @Column("roles")
+    private List<String> roles;
 
-    @Column("navbars")
-    private List<Navbars> navbars = new ArrayList<>();
+    @Transient
+    private List<Page> pages = new ArrayList<>();
 
-    @Column("header")
-    private Header header;
+    @Transient
+    private List<Navbar> navbars = new ArrayList<>();
 
-    @Column("footer")
-    private Footer footer;
+    @Transient
+    private List<ViewTemplate> viewTemplates = new ArrayList<>();
+
+    @Transient
+    private List<Header> headers = new ArrayList<>();
+
+    @Transient
+    private List<Footer> footers = new ArrayList<>();
 } 

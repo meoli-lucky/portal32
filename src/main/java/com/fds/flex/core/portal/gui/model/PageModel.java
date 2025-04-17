@@ -16,7 +16,7 @@ public class PageModel {
 	public String name;
 	public String title;
 	public String path;
-	public String target;
+	//public String target;
 	public String moduleId;
 	public String template;
 	public String type;
