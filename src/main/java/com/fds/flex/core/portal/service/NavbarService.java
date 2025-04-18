@@ -12,17 +12,12 @@ import reactor.core.publisher.Mono;
 public class NavbarService {
     private final NavbarRepository navbarRepository;
 
-    public Flux<Navbar> findBySiteIdAndParentIdIsNull(Long siteId) {
-        return navbarRepository.findBySiteIdAndParentIdIsNull(siteId)
-                .flatMap(navbar -> {
-                    return navbarRepository.findByParentId(navbar.getId())
-                            .collectList()
-                            .map(children -> {
-                                navbar.setChildrens(children);
-                                navbar.setHasChild(!children.isEmpty());
-                                return navbar;
-                            });
-                });
+    public Flux<Navbar> findBySiteId(Long siteId) {
+        return navbarRepository.findBySiteIdOrderByTree(siteId);
+    }
+
+    public Mono<Navbar> findById(Long id) {
+        return navbarRepository.findById(id);
     }
 
     public Mono<Navbar> save(Navbar navbar) {

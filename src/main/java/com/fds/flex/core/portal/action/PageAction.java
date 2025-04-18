@@ -1,6 +1,5 @@
 package com.fds.flex.core.portal.action;
 
-
 import com.fds.flex.core.portal.model.Page;
 import com.fds.flex.core.portal.service.PageService;
 import lombok.RequiredArgsConstructor;
@@ -14,19 +13,11 @@ public class PageAction {
     private final PageService pageService;
 
     public Flux<Page> findBySiteId(Long siteId) {
-        return pageService.findBySiteId(siteId)
-                .flatMap(page -> {
-                    // Thêm logic xử lý trước khi trả về page
-                    return Mono.just(page);
-                });
+        return pageService.findBySiteId(siteId);
     }
 
-    public Mono<Page> findByFriendlyURLAndSiteId(String friendlyURL, Long siteId) {
-        return pageService.findByFriendlyURLAndSiteId(friendlyURL, siteId)
-                .flatMap(page -> {
-                    // Thêm logic xử lý trước khi trả về page
-                    return Mono.just(page);
-                });
+    public Mono<Page> findById(Long id) {
+        return pageService.findById(id);
     }
 
     public Mono<Page> create(Page page) {
@@ -45,7 +36,6 @@ public class PageAction {
     }
 
     private Mono<Page> validatePage(Page page) {
-        // Thêm logic validate page
         if (page.getSiteId() == null) {
             return Mono.error(new IllegalArgumentException("Site ID is required"));
         }

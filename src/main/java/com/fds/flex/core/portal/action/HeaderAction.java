@@ -4,6 +4,8 @@ import com.fds.flex.core.portal.model.Header;
 import com.fds.flex.core.portal.service.HeaderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -11,17 +13,17 @@ import reactor.core.publisher.Mono;
 public class HeaderAction {
     private final HeaderService headerService;
 
-    public Mono<Header> findBySiteId(Long siteId) {
-        return headerService.findBySiteId(siteId)
+    public Mono<Header> create(Header header) {
+        return validateHeader(header)
+                .flatMap(validatedHeader -> headerService.save(validatedHeader));
+    }
+
+    public Mono<Header> findById(Long id) {
+        return headerService.findById(id)
                 .flatMap(header -> {
                     // Thêm logic xử lý trước khi trả về header
                     return Mono.just(header);
                 });
-    }
-
-    public Mono<Header> create(Header header) {
-        return validateHeader(header)
-                .flatMap(validatedHeader -> headerService.save(validatedHeader));
     }
 
     public Mono<Header> update(Long id, Header header) {
@@ -32,6 +34,14 @@ public class HeaderAction {
 
     public Mono<Void> delete(Long id) {
         return headerService.delete(id);
+    }
+
+    public Flux<Header> findBySiteId(Long siteId) {
+        return headerService.findBySiteId(siteId)
+                .flatMap(header -> {
+                    // Thêm logic xử lý trước khi trả về header
+                    return Mono.just(header);
+                });
     }
 
     private Mono<Header> validateHeader(Header header) {

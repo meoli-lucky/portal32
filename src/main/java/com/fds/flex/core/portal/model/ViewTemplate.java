@@ -18,6 +18,12 @@ public class ViewTemplate {
 
     @Column("site_id")
     private Long siteId;
+
+    @Column("template_name")
+    private String templateName;
+
+    @Column("template_type")
+    private String templateType;
     
     @Column("template_location")
     private String templateLocation;//on_db, on_file

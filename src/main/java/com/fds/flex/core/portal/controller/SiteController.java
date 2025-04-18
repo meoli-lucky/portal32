@@ -3,6 +3,7 @@ package com.fds.flex.core.portal.controller;
 import com.fds.flex.core.portal.action.SiteAction;
 import com.fds.flex.core.portal.model.Site;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -11,11 +12,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/nbio-ws/api/internal/sites")
 @RequiredArgsConstructor
 public class SiteController {
+
     private final SiteAction siteAction;
 
-    @GetMapping("/{siteName}")
-    public Mono<ResponseEntity<Site>> findBySiteName(@PathVariable String siteName) {
-        return siteAction.findBySiteName(siteName)
+    @GetMapping("/{id}")
+    public Mono<ResponseEntity<Site>> findById(@PathVariable Long id) {
+        return siteAction.findById(id)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -37,5 +39,11 @@ public class SiteController {
     public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
         return siteAction.delete(id)
                 .then(Mono.just(ResponseEntity.ok().build()));
+    }
+
+    @GetMapping("/filter")
+    public Mono<ResponseEntity<Page<Site>>> filter(@RequestParam(required = false) String keyword, @RequestParam(required = false) Long siteId, @RequestParam(required = false) Integer start, @RequestParam(required = false) Integer limit) {
+        return siteAction.filter(siteId, keyword, start, limit)
+                .map(ResponseEntity::ok);
     }
 } 

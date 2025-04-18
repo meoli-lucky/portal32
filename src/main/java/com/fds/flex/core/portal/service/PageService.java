@@ -13,11 +13,11 @@ public class PageService {
     private final PageRepository pageRepository;
 
     public Flux<Page> findBySiteId(Long siteId) {
-        return pageRepository.findBySiteId(siteId);
+        return pageRepository.findBySiteIdOrderByTree(siteId);
     }
 
-    public Mono<Page> findByFriendlyURLAndSiteId(String friendlyURL, Long siteId) {
-        return pageRepository.findByFriendlyURLAndSiteId(friendlyURL, siteId);
+    public Mono<Page> findById(Long id) {
+        return pageRepository.findById(id);
     }
 
     public Mono<Page> save(Page page) {

@@ -40,6 +40,9 @@ public class Page {
     @Column("secure")
     private boolean secure;
 
+    @Column("seq")
+    private int seq;
+
     @Column("include_content")
     private String includeContent;
 

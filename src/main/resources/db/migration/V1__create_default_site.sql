@@ -1,5 +1,6 @@
 -- Insert default admin site
-INSERT INTO sites (
+
+INSERT INTO site (
     site_name,
     context,
     private_site,
@@ -20,7 +21,7 @@ INSERT INTO sites (
 );
 
 -- Insert default guest site
-INSERT INTO sites (
+INSERT INTO site (
     site_name,
     context,
     private_site,
