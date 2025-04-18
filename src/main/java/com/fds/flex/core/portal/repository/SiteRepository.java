@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface SiteRepository extends R2dbcRepository<Site, Long> {
-    Mono<Site> findByFriendlyURL(String friendlyURL);
+    Mono<Site> findBySiteName(String siteName);
 } 

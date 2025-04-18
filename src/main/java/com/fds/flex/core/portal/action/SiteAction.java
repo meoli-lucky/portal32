@@ -11,8 +11,8 @@ import reactor.core.publisher.Mono;
 public class SiteAction {
     private final SiteService siteService;
 
-    public Mono<Site> findByFriendlyURL(String friendlyURL) {
-        return siteService.findByFriendlyURL(friendlyURL)
+    public Mono<Site> findBySiteName(String friendlyURL) {
+        return siteService.findBySiteName(friendlyURL)
                 .flatMap(site -> {
                     // Thêm logic xử lý trước khi trả về site
                     return Mono.just(site);

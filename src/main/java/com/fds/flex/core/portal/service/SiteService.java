@@ -11,8 +11,8 @@ import reactor.core.publisher.Mono;
 public class SiteService {
     private final SiteRepository siteRepository;
 
-    public Mono<Site> findByFriendlyURL(String friendlyURL) {
-        return siteRepository.findByFriendlyURL(friendlyURL);
+    public Mono<Site> findBySiteName(String siteName) {
+        return siteRepository.findBySiteName(siteName);
     }
 
     public Mono<Site> save(Site site) {
