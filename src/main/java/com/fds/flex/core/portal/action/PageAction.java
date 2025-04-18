@@ -39,7 +39,7 @@ public class PageAction {
         if (page.getSiteId() == null) {
             return Mono.error(new IllegalArgumentException("Site ID is required"));
         }
-        if (page.getPath() == null || page.getPath().isEmpty()) {
+        if (page.getPagePath() == null || page.getPagePath().isEmpty()) {
             return Mono.error(new IllegalArgumentException("Path is required"));
         }
         return Mono.just(page);

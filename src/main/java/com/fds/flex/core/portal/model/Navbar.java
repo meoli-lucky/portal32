@@ -7,6 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Table("navbar")
@@ -17,6 +18,15 @@ public class Navbar {
     @Id
     @Column("id")
     private Long id;
+
+    @Column("user_id")
+    private Long userId;
+
+    @Column("created_date")
+    private LocalDateTime createdDate;
+
+    @Column("modified_date")
+    private LocalDateTime modifiedDate;
 
     @Column("parent_id")
     private Long parentId;

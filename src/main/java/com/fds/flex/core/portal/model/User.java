@@ -5,41 +5,40 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("header")
+@Table("user")
 @Getter
 @Setter
-public class Header {
+public class User {
     @Id
     @Column("id")
     private Long id;
-
-    @Column("user_id")
-    private Long userId;
 
     @Column("created_date")
     private LocalDateTime createdDate;
 
     @Column("modified_date")
     private LocalDateTime modifiedDate;
+    
+    @Column("user_name")
+    private String username;
 
-    @Column("site_id")
-    private Long siteId;
+    @Column("password")
+    private String password;
+    
+    @Column("email")
+    private String email;
 
-    @Column("logo")
-    private String logo;
+    @Column("full_name")
+    private String fullName;    
+    
+    @Column("status")
+    private boolean status;
 
-    @Column("slogan")
-    private String slogan;
-
-    @Column("include_script")
-    private String includeScript;
-
-    @Column("include_style")
-    private String includeStyle;
-
-    @Column("include_content")
-    private String includeContent;
-} 
+    @Column("avatar")
+    private String avatar;
+    
+}
