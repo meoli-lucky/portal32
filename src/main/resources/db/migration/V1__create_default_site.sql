@@ -139,13 +139,96 @@ CREATE TABLE flex_navbar (
     secure BOOLEAN NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS flex_sys (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    created_date TIMESTAMP NOT NULL,
+    modified_date TIMESTAMP NOT NULL,
+    initialized BOOLEAN NOT NULL
+);
+
 -- Insert default admin site
+INSERT INTO flex_user (
+    user_name,
+    password,
+    email,
+    full_name,
+    status, 
+    avatar,
+    created_date,
+    modified_date
+) VALUES (
+    'admin',
+    'admin',
+    'admin@flexportal.com',
+    'admin',
+    true,
+    'admin.jpg',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_role (
+    user_id,
+    role_name,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    'admin',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+INSERT INTO flex_role (
+    user_id,
+    role_name,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    'content_manager',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+INSERT INTO flex_role (
+    user_id,
+    role_name,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    'system_manager',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_role (
+    user_id,
+    role_name,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    'user',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_user_role (
+    user_id,
+    role_id,
+    created_date,
+    modified_date
+) VALUES ( 
+    1,
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
 INSERT INTO flex_site (
     site_name,
     context,
     private_site,
-    spa_or_static,
-    description,
     created_date,
     modified_date
 ) VALUES (
@@ -176,3 +259,234 @@ INSERT INTO flex_site (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 ); 
+
+INSERT INTO flex_user_site (
+    user_id,
+    site_id,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_user_site (
+    user_id,
+    site_id,
+    created_date,
+    modified_date
+) VALUES (
+    2,
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_user_site (
+    user_id,
+    site_id,
+    created_date,
+    modified_date
+) VALUES (
+    3,
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_site_role (
+    site_id,
+    role_id,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_site_role (
+    site_id,
+    role_id,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    2,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_site_role (
+    site_id,
+    role_id,
+    created_date,
+    modified_date
+) VALUES (
+    1,
+    3,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);
+
+INSERT INTO flex_view_template (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    template_name, 
+    template_type,
+    template_location,
+    relative_path,
+    content
+) VALUES (
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    1,
+    'index',
+    'html',
+    'on_file',
+    'index.html',
+    NULL
+);
+
+INSERT INTO flex_view_template (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    template_name, 
+    template_type,
+    template_location,
+    relative_path,
+    content
+) VALUES (
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    2,
+    'index',
+    'html',
+    'on_file',
+    'index.html',
+    NULL
+);
+
+INSERT INTO flex_header (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    logo,
+    slogan,
+    include_script,
+    include_style,
+    include_content
+) VALUES (
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    2,
+    NULL,
+    NULL,
+    NULL,
+    NULL
+);
+
+INSERT INTO flex_page (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    parent_id,
+    page_name,
+    page_title,
+    page_path,
+    view_template_id,
+    secure,
+    seq,
+    include_content,
+    include_script,
+    include_style
+) VALUES (
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    1,
+    NULL,
+    'home',
+    'Home',
+    '/', 
+    1,
+    false,
+    1,
+    NULL,
+    NULL,
+    NULL
+);
+
+INSERT INTO flex_page (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    parent_id,
+    page_name,
+    page_title,
+    page_path,
+    view_template_id,
+    secure,
+    seq,
+    include_content,
+    include_script,
+    include_style
+) VALUES (
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    2,
+    NULL,
+    'home',
+    'Home',
+    '/', 
+    2,
+    false,
+    1,
+    NULL,
+    NULL,
+    NULL
+);
+
+INSERT INTO flex_footer (
+    user_id,
+    created_date,
+    modified_date,
+    site_id,
+    logo,
+    slogan,
+    include_script,
+    include_style,
+    include_content
+) VALUES (      
+    1,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP,
+    2,
+    NULL,
+    NULL,
+    NULL
+);
+
+INSERT INTO flex_sys (
+    created_date,
+    modified_date,
+    initialized
+) VALUES (
+    CURRENT_TIMESTAMP,  
+    CURRENT_TIMESTAMP,
+    true
+);
