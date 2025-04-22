@@ -1,5 +1,9 @@
 package com.fds.flex.core.portal.action;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 import com.fds.flex.common.ultility.Validator;
@@ -15,6 +19,7 @@ public class UserAction {
 
     private final UserService userService;
 
+    
     public Mono<User> getUser(Long id) {
         return userService.findById(id);
     }
@@ -31,6 +36,40 @@ public class UserAction {
     public Mono<User> updateUser(Long id, User user) {
         user.setId(id);
         return userService.save(user);
+    }
+
+    public Mono<User> login(String username, String password) {
+        return userService.findByUsername(username)
+            .flatMap(user -> {
+                if (user.getPassword().equals(password)) {
+                    // Tạo Authentication object
+                    Authentication auth = new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+                    // Lưu vào SecurityContext
+                    SecurityContextHolder.getContext().setAuthentication(auth);
+                    return Mono.just(user);
+                } else {
+                    return Mono.error(new IllegalArgumentException("Invalid username or password"));
+                }
+            });
+    }
+
+    public Mono<User> resetPassword(String username, String newPassword) {
+        // Validate the new password against the policy
+        if (!newPassword.matches(PASSWORD_POLICY)) {
+            return Mono.error(new IllegalArgumentException("Password does not meet the policy requirements"));
+        }
+
+        // Find the user by username
+        return userService.findByUsername(username)
+            .flatMap(user -> {
+                // Encrypt the new password using bcrypt
+                String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+                // Update the user's password
+                user.setPassword(encryptedPassword);
+                return userService.save(user);
+            })
+            .switchIfEmpty(Mono.error(new IllegalArgumentException("User not found")));
     }
 
     private Mono<User> validateUser(User user, String action) {

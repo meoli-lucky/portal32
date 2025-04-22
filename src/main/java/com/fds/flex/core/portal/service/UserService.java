@@ -17,6 +17,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Mono<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public Mono<User> save(User user) {
         return userRepository.save(user);
     }
