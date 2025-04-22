@@ -36,9 +36,8 @@ do
     fi
 done
 
-PLUGINS_DIR="$FLEX_HOME/plugins"
 CLASSPATH=""
-for jar in "$PLUGINS_DIR"/*.jar; do
+for jar in "$FLEX_HOME/plugins"/*.jar; do
 	if [ -z "$CLASSPATH" ]; then
 		if [ "$jar" != "${jar#*impl}" ]; then
 			echo "Ignore '$jar'"
@@ -55,7 +54,7 @@ for jar in "$PLUGINS_DIR"/*.jar; do
 done
 JVM_MEM_OPTS="-Xms256m -Xmx512m"
 JAVA_OPTS="-Djasypt.encryptor.password=flexcore"
-SPRING_OPTS="-Dloader.path='$PLUGINS_DIR','$FLEX_HOME/bin' -Dspring-boot.run.jvmArguments='-Duser.timezone=UTC' -Dspring.config.location='file:application.properties'"
+SPRING_OPTS="-Dloader.path='$FLEX_HOME/bin' -Dspring-boot.run.jvmArguments='-Duser.timezone=UTC' -Dspring.config.location='file:application-web.properties'"
 
 if [ "$CMD" = "start" ]; then
   CURRENT_PID=`ps axf | grep $FLEX_HOME/bin/portal325.jar | grep -v grep | awk '{ printf $1 }'`
@@ -105,6 +104,5 @@ elif [ "$CMD" = "restart" ]; then
 
 elif [ "$CMD" = "version" ]; then
   cat "$FLEX_HOME"/bin/version.txt
-  cat "$FLEX_HOME"/bin/wso2carbon-version.txt
   exit 0
 fi

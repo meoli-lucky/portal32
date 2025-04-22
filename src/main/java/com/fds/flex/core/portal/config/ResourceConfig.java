@@ -48,11 +48,11 @@ public class ResourceConfig implements WebFluxConfigurer {
 						.merge(PortalUtil.remakeStaticResourceDir(Arrays.asList(StringUtil.split(GetterUtil.getString(
 								PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_OTHER_STATIC_RESOURCE_LOCATIONS))))))));
 		String[] patterns = StringUtil.split(displayBuilder.getResources().getResourcePatterns());
-
+		
 		for (String pattern : patterns) {
 			registry.addResourceHandler(pattern)
 					.addResourceLocations(locations)
-					.setCacheControl(CacheControl.maxAge(java.time.Duration.ofSeconds(maxAge)));
+					.setCacheControl(CacheControl.maxAge(java.time.Duration.ofSeconds(maxAge)).cachePublic());
 		}
 	}
 }
