@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("user_site")
+@Table("flex_user_site")
 @Getter
 @Setter
 public class UserSite {

@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Table("navbar")
+@Table("flex_navbar")
 @Getter
 @Setter
 public class Navbar {

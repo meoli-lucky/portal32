@@ -11,7 +11,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 
-@Table(name = "page")
+@Table(name = "flex_page")
 @Getter
 @Setter
 public class Page {

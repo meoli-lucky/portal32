@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table("site")
+@Table("flex_site")
 @Getter
 @Setter
 public class Site {

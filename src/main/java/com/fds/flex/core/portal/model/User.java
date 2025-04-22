@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("user")
+@Table("flex_user")
 @Getter
 @Setter
 public class User {

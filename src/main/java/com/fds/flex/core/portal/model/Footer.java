@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 
-@Table("footers")
+@Table("flex_footer")
 @Getter
 @Setter
 public class Footer {

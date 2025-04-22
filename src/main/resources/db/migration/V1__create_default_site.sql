@@ -1,6 +1,5 @@
--- Insert default admin site
-
-CREATE TABLE user (
+DROP TABLE IF EXISTS flex_user;
+CREATE TABLE flex_user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(255) NOT NULL,
     created_date TIMESTAMP NOT NULL,
@@ -12,7 +11,8 @@ CREATE TABLE user (
     avatar VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE role (
+DROP TABLE IF EXISTS flex_role;
+CREATE TABLE flex_role (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     role_name VARCHAR(255) NOT NULL,
@@ -20,14 +20,15 @@ CREATE TABLE role (
     modified_date TIMESTAMP NOT NULL
 );
 
-CREATE TABLE user_role (
+DROP TABLE IF EXISTS flex_user_role;
+CREATE TABLE flex_user_role (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL
 );
 
-
-CREATE TABLE site (
+DROP TABLE IF EXISTS flex_site;
+CREATE TABLE flex_site (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     site_name VARCHAR(255) NOT NULL,
     context VARCHAR(255) NOT NULL,
@@ -38,23 +39,26 @@ CREATE TABLE site (
     modified_date TIMESTAMP NOT NULL
 );
 
-CREATE TABLE user_site (
+DROP TABLE IF EXISTS flex_user_site;
+CREATE TABLE flex_user_site (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     site_id BIGINT NOT NULL
 );  
 
-CREATE TABLE site_role (
+DROP TABLE IF EXISTS flex_site_role;
+CREATE TABLE flex_site_role (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     site_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL
 );  
 
-CREATE TABLE page (
+DROP TABLE IF EXISTS flex_page;
+CREATE TABLE flex_page (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     created_date TIMESTAMP NOT NULL,
-    modified_date TIMESTAMP NOT NULL
+    modified_date TIMESTAMP NOT NULL,
     site_id BIGINT NOT NULL,
     parent_id BIGINT,
     page_name VARCHAR(255) NOT NULL,
@@ -68,13 +72,15 @@ CREATE TABLE page (
     include_style VARCHAR(255)
 );  
 
-CREATE TABLE page_role (
+DROP TABLE IF EXISTS flex_page_role;
+CREATE TABLE flex_page_role (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     page_id BIGINT NOT NULL,
     role_id BIGINT NOT NULL
 );  
 
-CREATE TABLE view_template (
+DROP TABLE IF EXISTS flex_view_template;
+CREATE TABLE flex_view_template (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     created_date TIMESTAMP NOT NULL,
@@ -85,10 +91,10 @@ CREATE TABLE view_template (
     template_location VARCHAR(255) NOT NULL,
     relative_path VARCHAR(255),
     content VARCHAR(255)
-
 );
 
-CREATE TABLE header (
+DROP TABLE IF EXISTS flex_header;
+CREATE TABLE flex_header (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     created_date TIMESTAMP NOT NULL,
@@ -101,7 +107,8 @@ CREATE TABLE header (
     include_content VARCHAR(255)
 );
 
-CREATE TABLE footer (
+DROP TABLE IF EXISTS flex_footer;
+CREATE TABLE flex_footer (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     created_date TIMESTAMP NOT NULL,
@@ -114,7 +121,8 @@ CREATE TABLE footer (
     include_content VARCHAR(255)
 );
 
-CREATE TABLE navbar (
+DROP TABLE IF EXISTS flex_navbar;
+CREATE TABLE flex_navbar (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     created_date TIMESTAMP NOT NULL,
@@ -132,13 +140,12 @@ CREATE TABLE navbar (
 );
 
 -- Insert default admin site
-INSERT INTO site (
+INSERT INTO flex_site (
     site_name,
     context,
     private_site,
     spa_or_static,
     description,
-    roles,
     created_date,
     modified_date
 ) VALUES (
@@ -147,19 +154,17 @@ INSERT INTO site (
     true,
     true,
     'admin site',
-    ARRAY['admin', 'mod'],
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 );
 
 -- Insert default guest site
-INSERT INTO site (
+INSERT INTO flex_site (
     site_name,
     context,
     private_site,
     spa_or_static,
     description,
-    roles,
     created_date,
     modified_date
 ) VALUES (
@@ -168,7 +173,6 @@ INSERT INTO site (
     false,
     true,
     'guest site',
-    ARRAY[]::text[],
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 ); 

@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("site_role")
+@Table("flex_site_role")
 @Getter
 @Setter
 public class SiteRole {

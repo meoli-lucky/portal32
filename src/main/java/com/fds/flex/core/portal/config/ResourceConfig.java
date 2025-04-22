@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,8 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ResourceConfig implements WebFluxConfigurer {
 
-	@Value("${spring.web.resources.cache.period}")
-	Integer period;
 
 	@Value("${spring.web.resources.cache.cachecontrol.max-age}")
 	Integer maxAge;

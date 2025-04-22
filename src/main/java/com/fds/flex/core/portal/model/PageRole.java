@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("page_role")
+@Table("flex_page_role")
 @Getter
 @Setter
 public class PageRole {

@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("view_template")
+@Table("flex_view_template")
 @Getter
 @Setter
 public class ViewTemplate {

@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Table("header")
+@Table("flex_header")
 @Getter
 @Setter
 public class Header {
