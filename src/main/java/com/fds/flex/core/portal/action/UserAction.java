@@ -1,7 +1,6 @@
 package com.fds.flex.core.portal.action;
 
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,13 +8,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
+
+import java.time.LocalDateTime;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import com.fds.flex.common.ultility.Validator;
 import com.fds.flex.core.portal.model.User;
 import com.fds.flex.core.portal.service.UserService;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -29,21 +30,31 @@ public class UserAction {
     private final PasswordEncoder passwordEncoder;
 
     public Mono<User> getUser(Long id) {
-        return userService.findById(id);
+        return userService.findById(id)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
     }
 
     public Mono<User> createUser(User user) {
-
-        return userService.save(user);
+        LocalDateTime now = LocalDateTime.now();
+        user.setCreatedDate(now);
+        user.setModifiedDate(now);
+        return validateUser(user, "create")
+            .flatMap(userService::save);
     }
 
     public Mono<Void> deleteUser(Long id) {
+       userService.findById(id)
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
         return userService.delete(id);
     }
 
     public Mono<User> updateUser(Long id, User user) {
+        LocalDateTime now = LocalDateTime.now();
         user.setId(id);
-        return userService.save(user);
+        user.setCreatedDate(now);
+        user.setModifiedDate(now);
+        return validateUser(user, "update")
+            .flatMap(userService::save);
     }
 
     public Mono<ResponseEntity<Map<String, String>>> login(String username, String password, ServerWebExchange exchange) {
@@ -66,6 +77,7 @@ public class UserAction {
     }
 
     public Mono<User> resetPassword(String username, String newPassword) {
+        LocalDateTime now = LocalDateTime.now();
         // Validate the new password against the policy
         if (!newPassword.matches(PASSWORD_POLICY)) {
             return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password does not meet the policy requirements"));
@@ -81,7 +93,7 @@ public class UserAction {
 
                 // Update the user's password
                 user.setPassword(encryptedPassword);
-                
+                user.setModifiedDate(now);
                 return userService.save(user);
             })
             .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
@@ -90,16 +102,32 @@ public class UserAction {
     private Mono<User> validateUser(User user, String action) {
         if (action.equals("create")) {
             if (Validator.isNull(user.getUsername()) || Validator.isNull(user.getPassword()) || Validator.isNull(user.getEmail())) {
-                return Mono.error(new IllegalArgumentException("Username, password and email are required"));
-            }else if (user.getUsername().length() < 6 || user.getUsername().length() > 20) {
-                return Mono.error(new IllegalArgumentException("Full name is required"));
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username, password and email are required"));
+            } else if (!user.getUsername().matches(USERNAME_POLICY)) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username must be between 3 and 12 characters and not contain admin or administrator"));
+            } else if (!user.getEmail().matches(EMAIL_POLICY)) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email format"));
+            } else if (!user.getPassword().matches(PASSWORD_POLICY)) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be between 6 and 32 characters and contain at least one uppercase letter and one number"));
+            } else {
+                return userService.findByUsername(user.getUsername())
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
             }
-        }else if (action.equals("resetPassword")) {
-            if (Validator.isNull(user.getPassword())) {
-                return Mono.error(new IllegalArgumentException("Password is required"));
+        } else if (action.equals("update")) {
+             if (!user.getEmail().matches(EMAIL_POLICY)) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email format"));
+            } else if (!user.getPassword().matches(PASSWORD_POLICY)) {
+                return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password must be between 6 and 32 characters and contain at least one uppercase letter and one number"));
+            } else {
+                return userService.findByUsername(user.getUsername())
+                    .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
             }
         }
         return Mono.just(user);
+    }
+
+    public Flux<User> getAllUsers() {
+        return userService.findAll();
     }
 
     public static final String USERNAME_POLICY = "^(?!.*(admin|administrator))[a-zA-Z0-9]{3,12}$";

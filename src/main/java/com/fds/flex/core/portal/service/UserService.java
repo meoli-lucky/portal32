@@ -6,6 +6,7 @@ import com.fds.flex.core.portal.model.User;
 import com.fds.flex.core.portal.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -27,5 +28,9 @@ public class UserService {
 
     public Mono<Void> delete(Long id) {
         return userRepository.deleteById(id);
+    }
+
+    public Flux<User> findAll() {
+        return userRepository.findAll();
     }
 }
