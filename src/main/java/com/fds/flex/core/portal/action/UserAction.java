@@ -1,15 +1,20 @@
 package com.fds.flex.core.portal.action;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.server.ServerWebExchange;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import com.fds.flex.common.ultility.Validator;
 import com.fds.flex.core.portal.model.User;
 import com.fds.flex.core.portal.service.UserService;
-
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -17,9 +22,12 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserAction {
 
+    private final ReactiveAuthenticationManager authenticationManager;
+
     private final UserService userService;
 
-    
+    private final PasswordEncoder passwordEncoder;
+
     public Mono<User> getUser(Long id) {
         return userService.findById(id);
     }
@@ -38,38 +46,45 @@ public class UserAction {
         return userService.save(user);
     }
 
-    public Mono<User> login(String username, String password) {
-        return userService.findByUsername(username)
-            .flatMap(user -> {
-                if (user.getPassword().equals(password)) {
-                    // Tạo Authentication object
-                    Authentication auth = new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
-                    // Lưu vào SecurityContext
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    return Mono.just(user);
-                } else {
-                    return Mono.error(new IllegalArgumentException("Invalid username or password"));
-                }
-            });
+    public Mono<ResponseEntity<Map<String, String>>> login(String username, String password, ServerWebExchange exchange) {
+        var authRequest = new UsernamePasswordAuthenticationToken(username, password);
+
+        return authenticationManager.authenticate(authRequest)
+            .doOnNext(auth -> SecurityContextHolder.getContext().setAuthentication(auth))
+            .flatMap(auth -> exchange.getSession()
+                .doOnNext(session -> session.getAttributes().put("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext()))
+                .thenReturn(ResponseEntity.ok(Map.of("message", "Login success")))
+            )
+            .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Invalid credentials"))));
+    }
+
+    public Mono<ResponseEntity<Map<String, String>>> logout(ServerWebExchange exchange) {
+        return exchange.getSession()
+            .doOnNext(session -> session.invalidate())
+            .thenReturn(ResponseEntity.ok(Map.of("message", "Logout success")));
     }
 
     public Mono<User> resetPassword(String username, String newPassword) {
         // Validate the new password against the policy
         if (!newPassword.matches(PASSWORD_POLICY)) {
-            return Mono.error(new IllegalArgumentException("Password does not meet the policy requirements"));
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Password does not meet the policy requirements"));
         }
 
         // Find the user by username
         return userService.findByUsername(username)
             .flatMap(user -> {
                 // Encrypt the new password using bcrypt
-                String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+               // String encryptedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+               String encryptedPassword = passwordEncoder.encode(newPassword);
 
                 // Update the user's password
                 user.setPassword(encryptedPassword);
+                
                 return userService.save(user);
             })
-            .switchIfEmpty(Mono.error(new IllegalArgumentException("User not found")));
+            .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")));
     }
 
     private Mono<User> validateUser(User user, String action) {
@@ -78,6 +93,10 @@ public class UserAction {
                 return Mono.error(new IllegalArgumentException("Username, password and email are required"));
             }else if (user.getUsername().length() < 6 || user.getUsername().length() > 20) {
                 return Mono.error(new IllegalArgumentException("Full name is required"));
+            }
+        }else if (action.equals("resetPassword")) {
+            if (Validator.isNull(user.getPassword())) {
+                return Mono.error(new IllegalArgumentException("Password is required"));
             }
         }
         return Mono.just(user);
