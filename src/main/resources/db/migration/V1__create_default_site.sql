@@ -215,20 +215,18 @@ INSERT INTO flex_role (
 
 INSERT INTO flex_user_role (
     user_id,
-    role_id,
-    created_date,
-    modified_date
+    role_id
 ) VALUES ( 
     1,
-    1,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    1
 );
 
 INSERT INTO flex_site (
     site_name,
     context,
     private_site,
+    spa_or_static,
+    description,
     created_date,
     modified_date
 ) VALUES (
@@ -262,74 +260,50 @@ INSERT INTO flex_site (
 
 INSERT INTO flex_user_site (
     user_id,
-    site_id,
-    created_date,
-    modified_date
+    site_id
 ) VALUES (
     1,
-    1,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    1
 );
 
 INSERT INTO flex_user_site (
     user_id,
-    site_id,
-    created_date,
-    modified_date
+    site_id
 ) VALUES (
     2,
-    1,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    1
 );
 
 INSERT INTO flex_user_site (
     user_id,
-    site_id,
-    created_date,
-    modified_date
+    site_id
 ) VALUES (
     3,
-    1,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    1
 );
 
 INSERT INTO flex_site_role (
     site_id,
-    role_id,
-    created_date,
-    modified_date
+    role_id
 ) VALUES (
     1,
-    1,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    1
 );
 
 INSERT INTO flex_site_role (
     site_id,
-    role_id,
-    created_date,
-    modified_date
+    role_id
 ) VALUES (
     1,
-    2,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    2
 );
 
 INSERT INTO flex_site_role (
     site_id,
-    role_id,
-    created_date,
-    modified_date
+    role_id
 ) VALUES (
     1,
-    3,
-    CURRENT_TIMESTAMP,
-    CURRENT_TIMESTAMP
+    3
 );
 
 INSERT INTO flex_view_template (
@@ -391,6 +365,7 @@ INSERT INTO flex_header (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     2,
+    NULL,
     NULL,
     NULL,
     NULL,
@@ -476,6 +451,8 @@ INSERT INTO flex_footer (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     2,
+    NULL,
+    NULL,
     NULL,
     NULL,
     NULL

@@ -18,6 +18,10 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public Mono<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public Mono<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

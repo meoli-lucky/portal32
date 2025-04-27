@@ -38,25 +38,7 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-	@Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
-            .authorizeExchange()
-                .pathMatchers("/public/**").permitAll()
-                .anyExchange().authenticated()
-                .and()
-            .formLogin()
-                .loginPage("/login")
-                .and()
-            .logout()
-                .and()
-            .build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	
 	
 	//@Autowired
 	//GatewayPathWebFilter gatewayPathFilter;

@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReactiveDatabaseInitializer {
     private final DatabaseClient databaseClient;
+
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
@@ -33,7 +36,8 @@ public class ReactiveDatabaseInitializer {
                         .flatMap(initialized -> {
                             if (Boolean.FALSE.equals(initialized)) {
                                 log.info("Table flex_sys exists but not initialized, running script...");
-                                return executeInitScript("db/migration/V1__create_default_site.sql");
+                                return executeInitScript("db/migration/V1__create_default_site.sql")
+                                        .then(updateUserAdminPassword());
                             } else {
                                 log.info("Table flex_sys is already initialized.");
                                 return Mono.empty();
@@ -41,7 +45,8 @@ public class ReactiveDatabaseInitializer {
                         });
                 } else {
                     log.info("Table flex_sys does not exist, running script...");
-                    return executeInitScript("db/migration/V1__create_default_site.sql");
+                    return executeInitScript("db/migration/V1__create_default_site.sql")
+                            .then(updateUserAdminPassword());
                 }
             })
             .onErrorResume(e -> {
@@ -75,5 +80,13 @@ public class ReactiveDatabaseInitializer {
             log.error("Failed to load SQL script {}: {}", path, e.getMessage(), e);
             return Mono.error(e);
         }
+    }
+
+    private Mono<Void> updateUserAdminPassword() {
+        String encodedPassword = passwordEncoder.encode("admin");
+        return databaseClient.sql("UPDATE flex_user SET password = :password WHERE user_name = :user_name")
+            .bind("password", encodedPassword)
+            .bind("user_name", "admin")
+            .then();
     }
 } 
