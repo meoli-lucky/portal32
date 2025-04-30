@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -50,6 +51,9 @@ public class Page {
     @Column("secure")
     private boolean secure;
 
+    @Column("visible")
+    private boolean visible;
+
     @Column("seq")
     private int seq;
 
@@ -61,4 +65,10 @@ public class Page {
 
     @Column("include_style")
     private String includeStyle;
+
+    @Transient
+    private List<Page> children;
+
+    @Transient
+    private List<Role> roles;
 } 

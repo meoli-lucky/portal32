@@ -1,6 +1,5 @@
 package com.fds.flex.core.portal.model;
 
-import org.apache.hc.client5.http.entity.mime.Header;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
@@ -59,4 +58,7 @@ public class Site {
 
     @Transient
     private List<Footer> footers = new ArrayList<>();
+    
+    @Transient
+    private List<Role> roles = new ArrayList<>();
 } 

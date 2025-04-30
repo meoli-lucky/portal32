@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
                 .contentType(MediaType.valueOf("application/problem+json"))
                 .body(body));
     }
-
+    
     public record ProblemDetailResponse(
             URI type,
             String title,
