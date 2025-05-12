@@ -2,7 +2,6 @@ package com.fds.flex.core.portal.controller;
 
 import com.fds.flex.core.portal.action.NavbarAction;
 import com.fds.flex.core.portal.model.Navbar;
-import com.fds.flex.core.portal.service.NavbarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -5,6 +5,9 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
+
+import com.fds.flex.common.ultility.string.StringPool;
+
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
@@ -22,7 +25,7 @@ public class GlobalExceptionHandler {
                 status != null ? status : HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.getReason() != null ? ex.getReason() : (status != null ? status.getReasonPhrase() : "Unknown error"),
                 exchange,
-                URI.create("https://example.com/problem/" + ex.getStatusCode().value()));
+                URI.create(exchange.getRequest().getURI().toString() + StringPool.SLASH + ex.getStatusCode().value()));
     }
 
     @ExceptionHandler(Throwable.class)
@@ -32,7 +35,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 "Internal Server Error",
                 exchange,
-                URI.create("https://example.com/problem/500"));
+                URI.create(exchange.getRequest().getURI().toString() + "/500"));
     }
 
     private Mono<ResponseEntity<ProblemDetailResponse>> buildProblem(HttpStatus status, String detail,
@@ -49,7 +52,7 @@ public class GlobalExceptionHandler {
                 .contentType(MediaType.valueOf("application/problem+json"))
                 .body(body));
     }
-
+    
     public record ProblemDetailResponse(
             URI type,
             String title,

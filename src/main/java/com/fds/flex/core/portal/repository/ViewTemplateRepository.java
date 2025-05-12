@@ -11,6 +11,8 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface ViewTemplateRepository extends R2dbcRepository<ViewTemplate, Long> {
+
+    Flux<ViewTemplate> findBySiteId(Long siteId);
     
     @Query("SELECT * FROM view_template WHERE site_id = :siteId AND (:keyword IS NULL OR (template_name LIKE :keyword OR template_name LIKE :keyword)) ORDER BY id LIMIT :#{#pageable.pageSize} OFFSET :#{#pageable.offset}")
     Flux<ViewTemplate> filter(Long siteId, String keyword, Pageable pageable);

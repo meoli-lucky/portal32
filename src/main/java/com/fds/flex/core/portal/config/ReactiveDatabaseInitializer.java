@@ -6,6 +6,7 @@ import reactor.core.publisher.Mono;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.r2dbc.core.DatabaseClient;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import jakarta.annotation.PostConstruct;
 
@@ -19,19 +20,33 @@ import java.util.stream.Collectors;
 public class ReactiveDatabaseInitializer {
     private final DatabaseClient databaseClient;
 
+    private final PasswordEncoder passwordEncoder;
+
     @PostConstruct
     public void init() {
         databaseClient
-            .sql("SELECT COUNT(*) AS cnt FROM information_schema.tables WHERE table_schema = 'public'")
-            .map(row -> row.get("cnt", Long.class))
+            .sql("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'flex_sys') AS table_exists")
+            .map(row -> row.get("table_exists", Boolean.class))
             .first()
-            .flatMap(count -> {
-                if (count != null && count == 0) {
-                    log.info("No tables found, initializing database...");
-                    return executeInitScript("db/migration/V1__create_default_site.sql");
+            .flatMap(tableExists -> {
+                if (Boolean.TRUE.equals(tableExists)) {
+                    return databaseClient.sql("SELECT initialized FROM flex_sys ORDER BY created_date DESC LIMIT 1")
+                        .map(row -> row.get("initialized", Boolean.class))
+                        .first()
+                        .flatMap(initialized -> {
+                            if (Boolean.FALSE.equals(initialized)) {
+                                log.info("Table flex_sys exists but not initialized, running script...");
+                                return executeInitScript("db/migration/V1__create_default_site.sql")
+                                        .then(updateUserAdminPassword());
+                            } else {
+                                log.info("Table flex_sys is already initialized.");
+                                return Mono.empty();
+                            }
+                        });
                 } else {
-                    log.info("Database already initialized with {} tables", count);
-                    return Mono.empty();
+                    log.info("Table flex_sys does not exist, running script...");
+                    return executeInitScript("db/migration/V1__create_default_site.sql")
+                            .then(updateUserAdminPassword());
                 }
             })
             .onErrorResume(e -> {
@@ -65,5 +80,13 @@ public class ReactiveDatabaseInitializer {
             log.error("Failed to load SQL script {}: {}", path, e.getMessage(), e);
             return Mono.error(e);
         }
+    }
+
+    private Mono<Void> updateUserAdminPassword() {
+        String encodedPassword = passwordEncoder.encode("admin");
+        return databaseClient.sql("UPDATE flex_user SET password = :password WHERE user_name = :user_name")
+            .bind("password", encodedPassword)
+            .bind("user_name", "admin")
+            .then();
     }
 } 
