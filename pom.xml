@@ -166,6 +166,17 @@
 			<version>3.1.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -220,12 +231,13 @@
 									dir="${project.build.directory}/deploy/${artifactId}/resources" />
 								<mkdir
 									dir="${project.build.directory}/deploy/${artifactId}/plugins" />
+								<mkdir
+									dir="${project.build.directory}/deploy/${artifactId}/data" />
 								<copy
 									todir="${basedir}/target/deploy/${artifactId}/bin">
-									<!-- <fileset dir="${basedir}/target"
-									includes="${artifactId}-${version}.jar" /> -->
+								
 									<fileset dir="${basedir}/src/main/resources">
-										<include name="application.properties" />
+										<include name="application-web.properties" />
 										<include
 											name="application-prod.properties" />
 										<include name="flexplatform.p12" />
@@ -233,21 +245,11 @@
 									<fileset dir="${basedir}"
 										includes="portal325.sh" />
 									<fileset dir="${basedir}"
-										includes="portal325.bat" />
-									<fileset dir="${basedir}"
-										includes="flex-tools.sh" />
-									<fileset dir="${basedir}"
 										includes="Dockerfile" />
 								</copy>
 								<copy
 									todir="${basedir}/target/deploy/${artifactId}/conf">
 									<fileset dir="${basedir}/conf" includes="*" />
-
-									<!-- 
-						        	<fileset dir="${basedir}/src/main/resources">
-						        		<include name="logback-spring.xml" />
-						        	</fileset>
-						        	 -->
 								</copy>
 								<copy
 									todir="${basedir}/target/deploy/${artifactId}/resources">
@@ -256,6 +258,11 @@
 								<copy
 									todir="${basedir}/target/deploy/${artifactId}/plugins">
 									<fileset dir="${basedir}/plugins"
+										includes="*" />
+								</copy>
+								<copy
+									todir="${basedir}/target/deploy/${artifactId}/data">
+									<fileset dir="${basedir}/data"
 										includes="*" />
 								</copy>
 								<copy

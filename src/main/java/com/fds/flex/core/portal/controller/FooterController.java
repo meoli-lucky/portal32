@@ -1,41 +1,40 @@
 package com.fds.flex.core.portal.controller;
 
+import com.fds.flex.core.portal.action.FooterAction;
 import com.fds.flex.core.portal.model.Footer;
-import com.fds.flex.core.portal.service.FooterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/nbio-ws/api/internal/footers")
 @RequiredArgsConstructor
 public class FooterController {
-    private final FooterService footerService;
+    private final FooterAction footerAction;
 
     @GetMapping("/site/{siteId}")
-    public Mono<ResponseEntity<Footer>> findBySiteId(@PathVariable Long siteId) {
-        return footerService.findBySiteId(siteId)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public Flux<Footer> findBySiteId(@PathVariable Long siteId) {
+        return footerAction.findBySiteId(siteId);
     }
 
     @PostMapping
     public Mono<ResponseEntity<Footer>> create(@RequestBody Footer footer) {
-        return footerService.save(footer)
+        return footerAction.create(footer)
                 .map(ResponseEntity::ok);
     }
 
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Footer>> update(@PathVariable Long id, @RequestBody Footer footer) {
         footer.setId(id);
-        return footerService.save(footer)
+        return footerAction.update(id, footer)
                 .map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Void>> delete(@PathVariable Long id) {
-        return footerService.delete(id)
+        return footerAction.delete(id)
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 } 

@@ -5,12 +5,10 @@ import org.springframework.boot.web.reactive.filter.OrderedWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
-import org.springframework.web.server.ServerWebExchange;
+
 import com.fds.flex.core.portal.filter.GlobalWebFilter;
 import com.fds.flex.core.portal.gui.builder.DisplayBuilder;
 import com.fds.flex.core.portal.util.PortalUtil;

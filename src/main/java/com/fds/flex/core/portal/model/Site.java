@@ -1,16 +1,17 @@
 package com.fds.flex.core.portal.model;
 
-import org.apache.hc.client5.http.entity.mime.Header;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table("site")
+@Table("flex_site")
 @Getter
 @Setter
 public class Site {
@@ -18,6 +19,15 @@ public class Site {
     @Id
     @Column("id")
     private Long id;
+
+    @Column("user_id")
+    private Long userId;
+
+    @Column("created_date")
+    private LocalDateTime createdDate;
+
+    @Column("modified_date")
+    private LocalDateTime modifiedDate;
     
     @Column("site_name")
     private String siteName;
@@ -26,16 +36,13 @@ public class Site {
     private String context;
 
     @Column("private_site")
-    private boolean privateSite;
+    private boolean privateSite;//if true, only the users in the site can access the site
 
     @Column("spa_or_static")
-    private boolean spaOrStatic;
+    private boolean spaOrStatic;//if true, the site is a SPA, otherwise it is a static site
 
     @Column("description")
     private String description;
-
-    @Column("roles")
-    private List<String> roles;
 
     @Transient
     private List<Page> pages = new ArrayList<>();
@@ -51,4 +58,7 @@ public class Site {
 
     @Transient
     private List<Footer> footers = new ArrayList<>();
+    
+    @Transient
+    private List<Role> roles = new ArrayList<>();
 } 

@@ -11,18 +11,18 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class NavbarAction {
     private final NavbarService navbarService;
+ 
+    public Mono<Navbar> create(Navbar navbar) {
+        return validateNavbar(navbar)
+                .flatMap(validatedNavbar -> navbarService.save(validatedNavbar));
+    }
 
-    public Flux<Navbar> findBySiteId(Long siteId) {
-        return navbarService.findBySiteIdAndParentIdIsNull(siteId)
+    public Mono<Navbar> findById(Long id) {
+        return navbarService.findById(id)
                 .flatMap(navbar -> {
                     // Thêm logic xử lý trước khi trả về navbar
                     return Mono.just(navbar);
                 });
-    }
-
-    public Mono<Navbar> create(Navbar navbar) {
-        return validateNavbar(navbar)
-                .flatMap(validatedNavbar -> navbarService.save(validatedNavbar));
     }
 
     public Mono<Navbar> update(Long id, Navbar navbar) {
@@ -33,6 +33,14 @@ public class NavbarAction {
 
     public Mono<Void> delete(Long id) {
         return navbarService.delete(id);
+    }
+
+    public Flux<Navbar> findBySiteId(Long siteId) {
+        return navbarService.findBySiteId(siteId)
+                .flatMap(navbar -> {
+                    // Thêm logic xử lý trước khi trả về navbar
+                    return Mono.just(navbar);
+                });
     }
 
     private Mono<Navbar> validateNavbar(Navbar navbar) {

@@ -19,6 +19,7 @@ import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.core.portal.config.JWTIssuersConfig;
 import com.fds.flex.core.portal.gui.model.SiteModel;
 import com.fds.flex.core.portal.model.GatewayModel;
+import com.fds.flex.core.portal.model.Site;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -45,6 +46,8 @@ public class PortalUtil {
 	public static List<String> _GATEWAY_EXCLUDE_PATHS = new ArrayList<String>();
 
 	public static List<String> _PLUGIN_AVAILABLE_SERVICES = new ArrayList<String>();
+
+	public static Map<Long, Site> _SITE_ID_MAP = new HashMap<>();
 
 	public static String createErrorResponseMessage(String error, int status) {
 

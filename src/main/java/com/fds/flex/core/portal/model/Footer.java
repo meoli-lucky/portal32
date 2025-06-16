@@ -5,10 +5,10 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
-import java.util.List;
 
-@Table("footers")
+@Table("flex_footer")
 @Getter
 @Setter
 public class Footer {
@@ -16,6 +16,15 @@ public class Footer {
     @Id
     @Column("id")
     private Long id;
+
+    @Column("user_id")
+    private Long userId;
+
+    @Column("created_date")
+    private LocalDateTime createdDate;
+
+    @Column("modified_date")
+    private LocalDateTime modifiedDate;
 
     @Column("site_id")
     private Long siteId;

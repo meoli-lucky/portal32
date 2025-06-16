@@ -4,6 +4,8 @@ import com.fds.flex.core.portal.model.Footer;
 import com.fds.flex.core.portal.service.FooterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
@@ -11,23 +13,32 @@ import reactor.core.publisher.Mono;
 public class FooterAction {
     private final FooterService footerService;
 
-    public Mono<Footer> findBySiteId(Long siteId) {
-        return footerService.findBySiteId(siteId)
+    public Mono<Footer> create(Footer footer) {
+        return validateFooter(footer)
+                .flatMap(validatedFooter -> footerService.save(validatedFooter));
+    }
+
+    
+    public Mono<Footer> findById(Long id) {
+        return footerService.findById(id)
                 .flatMap(footer -> {
                     // Thêm logic xử lý trước khi trả về footer
                     return Mono.just(footer);
                 });
     }
 
-    public Mono<Footer> create(Footer footer) {
-        return validateFooter(footer)
-                .flatMap(validatedFooter -> footerService.save(validatedFooter));
-    }
-
     public Mono<Footer> update(Long id, Footer footer) {
         footer.setId(id);
         return validateFooter(footer)
                 .flatMap(validatedFooter -> footerService.save(validatedFooter));
+    }
+
+    public Flux<Footer> findBySiteId(Long siteId) {
+        return footerService.findBySiteId(siteId)
+                .flatMap(footer -> {
+                    // Thêm logic xử lý trước khi trả về footer
+                    return Mono.just(footer);
+                });
     }
 
     public Mono<Void> delete(Long id) {
