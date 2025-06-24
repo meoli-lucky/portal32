@@ -11,6 +11,7 @@ import org.springframework.web.server.WebFilterChain;
 
 import com.fds.flex.core.portal.filter.GlobalWebFilter;
 import com.fds.flex.core.portal.gui.builder.DisplayBuilder;
+import com.fds.flex.core.portal.service.SiteService;
 import com.fds.flex.core.portal.util.PortalUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,13 @@ public class WebFilterConfig {
     @Autowired
     private DisplayBuilder displayBuilder;
 
+    @Autowired
+    private SiteService siteService;
+
     @Bean
     public WebFilter globalWebFilter() {
         return new OrderedWebFilter() {
-            private final GlobalWebFilter delegate = new GlobalWebFilter();
+            private final GlobalWebFilter delegate = new GlobalWebFilter(displayBuilder, siteService);
             
             @Override
             public int getOrder() {

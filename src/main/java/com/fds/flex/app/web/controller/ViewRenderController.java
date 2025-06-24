@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +24,10 @@ import com.fds.flex.common.ultility.string.StringPool;
 import com.fds.flex.core.portal.gui.builder.DisplayBuilder;
 import com.fds.flex.core.portal.gui.model.DisplayModel;
 import com.fds.flex.core.portal.gui.model.SiteModel;
+import com.fds.flex.core.portal.model.Page;
+import com.fds.flex.core.portal.model.Site;
+import com.fds.flex.core.portal.model.SiteDisplay;
+import com.fds.flex.core.portal.model.ViewTemplate;
 import com.fds.flex.core.portal.property.PropKey;
 import com.fds.flex.core.portal.security.CustomUserDetails;
 import com.fds.flex.core.portal.util.PortalConstant;
@@ -43,12 +48,16 @@ public class ViewRenderController {
 	@Autowired
 	PebbleEngine templateEngine;
 
+	@Autowired
+	CacheManager cacheManager;
+
 	@GetMapping(value = { "/viewRender" })
 	@ResponseBody
 	public Mono<String> page(ServerWebExchange exchange) {
 		String servletPath = exchange.getRequest().getPath().value();
 		String originContextPath = exchange.getAttribute("originContextPath");
-		SiteModel site = exchange.getAttribute("site");
+		//SiteModel site = exchange.getAttribute("site");
+		Site site = exchange.getAttribute("site");
 
 		log.info("servletPath: {}", servletPath);
 
@@ -57,17 +66,24 @@ public class ViewRenderController {
 			return Mono.just(render404());
 		}
 
-		if (site.getSitePaths().contains(originContextPath)) {
-			DisplayModel displayModel = site.getDisplayModelMap().get(originContextPath);
+		if (site.getContext().contains(originContextPath)) {
+			SiteDisplay cachedSiteDisplay = cacheManager.getCache("siteDisplayCache").get(site.getId(), SiteDisplay.class);
+			SiteDisplay siteDisplay = cachedSiteDisplay != null ? cachedSiteDisplay : SiteDisplay.build(site);
+			
+			//DisplayModel displayModel = site.getDisplayModelMap().get(originContextPath);
 
 			// Khởi tạo với giá trị mặc định vì không còn sử dụng Spring Security MVC
 			boolean isSignedIn = false;
+
 			CustomUserDetails customUserDetails = new CustomUserDetails();
 
-			displayModel.setSignedIn(isSignedIn);
-			displayModel.setUserContext(customUserDetails);
+			//displayModel.setSignedIn(isSignedIn);
+			//displayModel.setUserContext(customUserDetails);
 
-			if (Validator.isNotNull(customUserDetails)) {
+			siteDisplay.setSignedIn(isSignedIn);
+			siteDisplay.setUserContext(customUserDetails);
+
+			/* if (Validator.isNotNull(customUserDetails)) {
 				List<String> attribute = Arrays.asList("username", "email", "fullName", "roles");
 
 				try {
@@ -110,11 +126,18 @@ public class ViewRenderController {
 
 			if (Validator.isNotNull(PortalUtil._EXTERNAL_PROPERTY_JSON)) {
 				displayModel.setConfigurations(PortalUtil._EXTERNAL_PROPERTY_JSON);
+			} */
+			Page page = siteDisplay.getPageMap().get(servletPath);
+			if (page == null) {
+				log.warn("not found page: {}", servletPath);
+				return Mono.just(render404());
 			}
 
-			String page = displayModel.getTemplatePath();
+			ViewTemplate viewTemplate = siteDisplay.getViewTemplateMap().get(page.getViewTemplateId());
 
-			if (GetterUtil.getBoolean(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_THEME_PRELOAD))) {
+			String pageTemplate = viewTemplate.getTemplateName();
+
+			/* if (GetterUtil.getBoolean(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_THEME_PRELOAD))) {
 				String tmp = PortalConstant.WORK_FOLDER + StringPool.SLASH + PortalConstant.RUNTIME_FOLDER
 						+ StringPool.SLASH + displayModel.getThemeId() + StringPool.SLASH + displayModel.getPageId();
 
@@ -131,15 +154,15 @@ public class ViewRenderController {
 						return render404();
 					}
 				});
-			}
+			} */
 
 			log.info("======>>> Page: {}", page);
 
 			return Mono.fromCallable(() -> {
 				try {
-					PebbleTemplate template = templateEngine.getTemplate(page);
+					PebbleTemplate template = templateEngine.getTemplate(pageTemplate);
 					StringWriter writer = new StringWriter();
-					template.evaluate(writer, Map.of("display", displayModel));
+					template.evaluate(writer, Map.of("display", siteDisplay));
 					return writer.toString();
 				} catch (IOException e) {
 					log.error("Error rendering 404 page", e);

@@ -71,4 +71,7 @@ public class Page {
 
     @Transient
     private List<Role> roles;
+
+    @Transient
+    private ViewTemplate viewTemplate;
 } 

@@ -2,6 +2,9 @@ package com.fds.flex.core.portal.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.fds.flex.core.portal.security.CustomUserDetails;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +14,11 @@ import lombok.Setter;
 public class SiteDisplay extends Site {
     private List<String> contextPaths = new ArrayList<>();
     private List<String> secureContextPaths = new ArrayList<>();
-
+    private boolean isSignedIn;
+	private CustomUserDetails userContext;
+	private String userContextDetail;
+    private Map<String, Page> pageMap;
+    private Map<Long, ViewTemplate> viewTemplateMap;
     public static SiteDisplay build(Site site) {
         SiteDisplay siteDisplay = new SiteDisplay();
         
@@ -49,6 +56,11 @@ public class SiteDisplay extends Site {
                 siteDisplay.secureContextPaths.add(fullPath);
             }
         }
+
+        site.getPages().forEach(page -> {
+            siteDisplay.getPageMap().put(page.getPagePath(), page);
+            siteDisplay.getViewTemplateMap().put(page.getViewTemplateId(), page.getViewTemplate());
+        });
 
         return siteDisplay;
     }
