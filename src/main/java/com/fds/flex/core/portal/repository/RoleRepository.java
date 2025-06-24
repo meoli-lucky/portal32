@@ -11,5 +11,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface RoleRepository extends R2dbcRepository<Role, Long> {
     Mono<Role> findById(Long id);
-    Flux<Role> findBySiteId(Long siteId);
+    //Flux<Role> findBySiteId(Long siteId);
 }

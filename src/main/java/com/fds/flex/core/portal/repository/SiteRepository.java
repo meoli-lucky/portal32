@@ -16,6 +16,6 @@ public interface SiteRepository extends R2dbcRepository<Site, Long> {
     @Query("SELECT COUNT(*) FROM site WHERE (:keyword IS NULL OR site_name LIKE :keyword)")
     Mono<Long> countFilter(String keyword);
     
-    @Query("SELECT * FROM site WHERE context_path = :contextPath")
+    @Query("SELECT * FROM flex_site WHERE context = :contextPath")
     Mono<Site> findByContextPath(String contextPath);
 } 

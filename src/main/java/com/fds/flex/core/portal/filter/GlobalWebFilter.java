@@ -3,6 +3,7 @@ package com.fds.flex.core.portal.filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ServerWebExchange;
@@ -18,20 +19,20 @@ import com.fds.flex.core.portal.model.GatewayModel;
 import com.fds.flex.core.portal.model.Site;
 import com.fds.flex.core.portal.service.SiteService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Order(2)
 @Slf4j
-@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
-@ConditionalOnProperty(name = "flexcore.portal.web.context-path-filter.enabled", havingValue = "true", matchIfMissing = true)
+//@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+//@ConditionalOnProperty(name = "flexcore.portal.web.context-path-filter.enabled", havingValue = "true", matchIfMissing = true)
+@RequiredArgsConstructor
 public class GlobalWebFilter implements WebFilter {
 
-    @Autowired
-    DisplayBuilder displayBuilder;
+    private final DisplayBuilder displayBuilder;
 
-    @Autowired
-    private SiteService siteService;
+    private final SiteService siteService;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
