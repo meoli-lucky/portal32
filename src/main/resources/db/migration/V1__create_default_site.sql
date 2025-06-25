@@ -232,7 +232,7 @@ INSERT INTO flex_site (
     modified_date
 ) VALUES (
     'admin',
-    '/site/admin/',
+    '/site/admin',
     true,
     true,
     'admin site',
@@ -322,10 +322,10 @@ INSERT INTO flex_view_template (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     1,
-    'index',
+    'adminindex',
     'html',
     'on_file',
-    'index.html',
+    'viewtemplates/adminindex.html',
     NULL
 );
 
@@ -344,10 +344,10 @@ INSERT INTO flex_view_template (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP,
     2,
-    'index',
+    'defaultindex',
     'html',
     'on_file',
-    'index.html',
+    'viewtemplates/defaultindex.html',
     NULL
 );
 

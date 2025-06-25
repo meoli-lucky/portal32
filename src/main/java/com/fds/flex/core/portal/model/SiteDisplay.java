@@ -1,6 +1,7 @@
 package com.fds.flex.core.portal.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,8 @@ public class SiteDisplay extends Site {
     private boolean isSignedIn;
 	private CustomUserDetails userContext;
 	private String userContextDetail;
-    private Map<String, Page> pageMap;
-    private Map<Long, ViewTemplate> viewTemplateMap;
+    private Map<String, Page> pageMap = new HashMap<>();
+    private Map<Long, ViewTemplate> viewTemplateMap = new HashMap<>();
     public static SiteDisplay build(Site site) {
         SiteDisplay siteDisplay = new SiteDisplay();
         

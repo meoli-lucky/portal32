@@ -14,9 +14,9 @@ public interface ViewTemplateRepository extends R2dbcRepository<ViewTemplate, Lo
 
     Flux<ViewTemplate> findBySiteId(Long siteId);
     
-    @Query("SELECT * FROM view_template WHERE site_id = :siteId AND (:keyword IS NULL OR (template_name LIKE :keyword OR template_name LIKE :keyword)) ORDER BY id LIMIT :#{#pageable.pageSize} OFFSET :#{#pageable.offset}")
+    @Query("SELECT * FROM flex_view_template WHERE site_id = :siteId AND (:keyword IS NULL OR (template_name LIKE :keyword OR template_name LIKE :keyword)) ORDER BY id LIMIT :#{#pageable.pageSize} OFFSET :#{#pageable.offset}")
     Flux<ViewTemplate> filter(Long siteId, String keyword, Pageable pageable);
 
-    @Query("SELECT COUNT(*) FROM view_template WHERE site_id = :siteId AND (:keyword IS NULL OR (template_name LIKE :keyword OR template_name LIKE :keyword))")
+    @Query("SELECT COUNT(*) FROM flex_view_template WHERE site_id = :siteId AND (:keyword IS NULL OR (template_name LIKE :keyword OR template_name LIKE :keyword))")
     Mono<Long> countFilter(Long siteId, String keyword);
 } 

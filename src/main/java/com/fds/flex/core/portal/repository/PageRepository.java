@@ -11,19 +11,19 @@ import reactor.core.publisher.Mono;
 public interface PageRepository extends R2dbcRepository<Page, Long> {
     Mono<Page> findById(Long id);
     
-    @Query("SELECT * FROM page WHERE site_id = :siteId")
+    @Query("SELECT * FROM flex_page WHERE site_id = :siteId")
     Flux<Page> findBySiteId(Long siteId);
 
-    @Query("SELECT * FROM page WHERE site_id = :siteId AND parent_id = :parentId")
+    @Query("SELECT * FROM flex_page WHERE site_id = :siteId AND parent_id = :parentId")
     Flux<Page> findBySiteIdAndParentId(Long siteId, Long parentId);
 
     @Query("WITH RECURSIVE page_tree AS (" +
            "  SELECT id, parent_id, name, path, seq, 0 as level " +
-           "  FROM page " +
+           "  FROM flex_page " +
            "  WHERE site_id = :siteId AND parent_id IS NULL " +
            "  UNION ALL " +
            "  SELECT p.id, p.parent_id, p.name, p.path, p.seq, pt.level + 1 " +
-           "  FROM page p " +
+           "  FROM flex_page p " +
            "  JOIN page_tree pt ON p.parent_id = pt.id " +
            "  WHERE p.site_id = :siteId " +
            ") " +

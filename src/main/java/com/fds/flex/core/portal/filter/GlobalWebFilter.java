@@ -65,16 +65,20 @@ public class GlobalWebFilter implements WebFilter {
             return forwardToGateway(exchange, chain, gatewayModel, servicePath);
 
         } else if ("SITE".equals(pathType)) {
-            SiteModel siteModel = PortalUtil._SITE_CONTEXT_MAP.get(requestUri);
-            Mono<Site> monoSite = siteService.findByContextPath(requestUri);
+            //SiteModel siteModel = PortalUtil._SITE_CONTEXT_MAP.get(requestUri);
 
+            Mono<Site> monoSite = requestUri.contains("/site/") ? siteService.findByContextPathAndIgnoreRootSite(requestUri) : siteService.getRootSite();
+          
             return monoSite.flatMap(site -> {
+               
                 if (Validator.isNull(site)) {
+                 
                     return forwardError(exchange, chain, requestUri);
                 }
                 if (site.isPrivateSite()) {
                     return checkPermission(exchange, chain, requestUri, site);
                 }
+              
                 return forward(exchange, chain, requestUri, site);
             });
 

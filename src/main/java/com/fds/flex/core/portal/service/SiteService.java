@@ -72,12 +72,75 @@ public class SiteService {
         return siteRepository.deleteById(id);
     }
 
-    public Mono<Site> findByContextPath(String contextPath) {
-        return siteRepository.findByContextPath(contextPath);
+    public Mono<Site> getRootSite() {
+        return siteRepository.getRootSite().flatMap(site -> {
+            Mono<List<com.fds.flex.core.portal.model.Page>> pagesMono = pageService.buildPageTree(site.getId());
+            Mono<List<Header>> headersMono = headerRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Footer>> footersMono = footerRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Navbar>> navbarsMono = navbarRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<ViewTemplate>> templatesMono = viewTemplateRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Role>> rolesMono = siteRoleRepository.findBySiteId(site.getId())
+                    .flatMap(siteRole -> roleRepository.findById(siteRole.getRoleId()))
+                    .collectList();
+            return Mono.zip(pagesMono, headersMono, footersMono, navbarsMono, templatesMono, rolesMono)
+                    .map(tuple -> {
+                        site.setPages(tuple.getT1());
+                        site.setHeaders(tuple.getT2());
+                        site.setFooters(tuple.getT3());
+                        site.setNavbars(tuple.getT4());
+                        site.setViewTemplates(tuple.getT5());
+                        site.setRoles(tuple.getT6());
+                        return site;
+                    });
+        });
+    }
+
+    public Mono<Site> findByContextPathAndIgnoreRootSite(String contextPath) {
+        return siteRepository.findByContextPathAndIgnoreRootSite(contextPath).flatMap(site -> {
+            Mono<List<com.fds.flex.core.portal.model.Page>> pagesMono = pageService.buildPageTree(site.getId());
+            Mono<List<Header>> headersMono = headerRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Footer>> footersMono = footerRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Navbar>> navbarsMono = navbarRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<ViewTemplate>> templatesMono = viewTemplateRepository.findBySiteId(site.getId()).collectList();
+            Mono<List<Role>> rolesMono = siteRoleRepository.findBySiteId(site.getId())
+                    .flatMap(siteRole -> roleRepository.findById(siteRole.getRoleId()))
+                    .collectList();
+            return Mono.zip(pagesMono, headersMono, footersMono, navbarsMono, templatesMono, rolesMono)
+                    .map(tuple -> {
+                        site.setPages(tuple.getT1());
+                        site.setHeaders(tuple.getT2());
+                        site.setFooters(tuple.getT3());
+                        site.setNavbars(tuple.getT4());
+                        site.setViewTemplates(tuple.getT5());
+                        site.setRoles(tuple.getT6());
+                        return site;
+                    });
+        });
     }
 
     public Flux<Site> findAll() {
-        return siteRepository.findAll();
+        return siteRepository.findAll()
+                .flatMap(site -> {
+                    Mono<List<com.fds.flex.core.portal.model.Page>> pagesMono = pageService.buildPageTree(site.getId());
+                    Mono<List<Header>> headersMono = headerRepository.findBySiteId(site.getId()).collectList();
+                    Mono<List<Footer>> footersMono = footerRepository.findBySiteId(site.getId()).collectList();
+                    Mono<List<Navbar>> navbarsMono = navbarRepository.findBySiteId(site.getId()).collectList();
+                    Mono<List<ViewTemplate>> templatesMono = viewTemplateRepository.findBySiteId(site.getId()).collectList();
+                    Mono<List<Role>> rolesMono = siteRoleRepository.findBySiteId(site.getId())
+                            .flatMap(siteRole -> roleRepository.findById(siteRole.getRoleId()))
+                            .collectList();
+                    
+                    return Mono.zip(pagesMono, headersMono, footersMono, navbarsMono, templatesMono, rolesMono)
+                            .map(tuple -> {
+                                site.setPages(tuple.getT1());
+                                site.setHeaders(tuple.getT2());
+                                site.setFooters(tuple.getT3());
+                                site.setNavbars(tuple.getT4());
+                                site.setViewTemplates(tuple.getT5());
+                                site.setRoles(tuple.getT6());
+                                return site;
+                            });
+                });
     }
 
     public Mono<Page<Site>> filter(Long siteId, String keyword, int start, int limit) {

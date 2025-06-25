@@ -23,9 +23,13 @@ public class PageService {
     private final PageRepository pageRepository;
     private final RoleRepository roleRepository;
     private final PageRoleRepository pageRoleRepository;
+    private final ViewTemplateService viewTemplateService;
 
     public Mono<List<Page>> buildPageTree(Long siteId) {
         return pageRepository.findBySiteId(siteId) // Trả Flux<Page>
+                .flatMap(this::enrichWithChildren)
+                .flatMap(this::enrichWithRoles)
+                .flatMap(this::enrichWithViewTemplate)
                 .collectList()
                 .map(this::buildTreeFromFlatList);
     }
@@ -34,22 +38,24 @@ public class PageService {
         return pageRepository.findBySiteIdOrderByTree(siteId)
                 .sort(Comparator.comparingInt(Page::getSeq))
                 .flatMap(this::enrichWithChildren)
-                .flatMap(this::enrichWithRoles);
+                .flatMap(this::enrichWithRoles)
+                .flatMap(this::enrichWithViewTemplate);
     }
 
     public Flux<Page> findBySiteIdAndParentId(Long siteId, Long parentId) {
         return pageRepository.findBySiteIdAndParentId(siteId, parentId)
                 .sort(Comparator.comparingInt(Page::getSeq))
                 .flatMap(this::enrichWithChildren)
-                .flatMap(this::enrichWithRoles);
+                .flatMap(this::enrichWithRoles)
+                .flatMap(this::enrichWithViewTemplate);
     }
 
     public Flux<Page> findBySiteId(Long siteId) {
-        return pageRepository.findBySiteId(siteId).flatMap(this::enrichWithChildren).flatMap(this::enrichWithRoles);
+        return pageRepository.findBySiteId(siteId).flatMap(this::enrichWithChildren).flatMap(this::enrichWithRoles).flatMap(this::enrichWithViewTemplate);
     }
 
     public Mono<Page> findById(Long id) {
-        return pageRepository.findById(id).flatMap(this::enrichWithChildren).flatMap(this::enrichWithRoles);
+        return pageRepository.findById(id).flatMap(this::enrichWithChildren).flatMap(this::enrichWithRoles).flatMap(this::enrichWithViewTemplate);
     }
 
     public Mono<Page> save(Page page) {
@@ -63,6 +69,8 @@ public class PageService {
     public Mono<List<Page>> getAllChildPages(Long pageId) {
         return pageRepository.findByParentId(pageId)
                 .flatMap(this::enrichWithChildren)
+                .flatMap(this::enrichWithRoles)
+                .flatMap(this::enrichWithViewTemplate)
                 .collectList();
     }
 
@@ -80,6 +88,14 @@ public class PageService {
                 .collectList()
                 .map(roles -> {
                     page.setRoles(roles);
+                    return page;
+                });
+    }
+
+    private Mono<Page> enrichWithViewTemplate(Page page) {
+        return viewTemplateService.findById(page.getViewTemplateId())
+                .map(viewTemplate -> {
+                    page.setViewTemplate(viewTemplate);
                     return page;
                 });
     }

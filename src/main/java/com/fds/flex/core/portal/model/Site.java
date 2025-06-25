@@ -32,7 +32,7 @@ public class Site {
     @Column("site_name")
     private String siteName;
 
-    @Column("context_path")
+    @Column("context")
     private String context;
 
     @Column("private_site")

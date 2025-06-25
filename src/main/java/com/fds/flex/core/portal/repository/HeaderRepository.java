@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface HeaderRepository extends R2dbcRepository<Header, Long> {
     
-    @Query("SELECT * FROM header WHERE site_id = :siteId")
+    @Query("SELECT * FROM flex_header WHERE site_id = :siteId")
     Flux<Header> findBySiteId(Long siteId);
 } 

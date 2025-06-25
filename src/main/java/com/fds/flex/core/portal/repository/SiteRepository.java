@@ -10,12 +10,15 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface SiteRepository extends R2dbcRepository<Site, Long> {
-    @Query("SELECT * FROM site WHERE (:keyword IS NULL OR site_name LIKE :keyword) ORDER BY site_name")
+    @Query("SELECT * FROM flex_site WHERE (:keyword IS NULL OR site_name LIKE :keyword) ORDER BY site_name")
     Flux<Site> filter(String keyword, Pageable pageable);
 
-    @Query("SELECT COUNT(*) FROM site WHERE (:keyword IS NULL OR site_name LIKE :keyword)")
+    @Query("SELECT COUNT(*) FROM flex_site WHERE (:keyword IS NULL OR site_name LIKE :keyword)")
     Mono<Long> countFilter(String keyword);
     
-    @Query("SELECT * FROM flex_site WHERE context = :contextPath")
-    Mono<Site> findByContextPath(String contextPath);
+    @Query("SELECT * FROM flex_site WHERE :contextPath LIKE CONCAT(context, '%') AND context LIKE '/site/%'")
+    Mono<Site> findByContextPathAndIgnoreRootSite(String contextPath);
+
+    @Query("SELECT * FROM flex_site WHERE  context = '/'")
+    Mono<Site> getRootSite();
 } 

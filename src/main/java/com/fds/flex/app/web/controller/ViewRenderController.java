@@ -65,8 +65,11 @@ public class ViewRenderController {
 			log.warn("not found site");
 			return Mono.just(render404());
 		}
-
-		if (site.getContext().contains(originContextPath)) {
+		String currentPagePath = originContextPath.replace(site.getContext(), "");
+		if(currentPagePath.equals("")){
+			currentPagePath = "/";
+		}
+		if (originContextPath.contains(site.getContext())) {
 			SiteDisplay cachedSiteDisplay = cacheManager.getCache("siteDisplayCache").get(site.getId(), SiteDisplay.class);
 			SiteDisplay siteDisplay = cachedSiteDisplay != null ? cachedSiteDisplay : SiteDisplay.build(site);
 			
@@ -127,7 +130,7 @@ public class ViewRenderController {
 			if (Validator.isNotNull(PortalUtil._EXTERNAL_PROPERTY_JSON)) {
 				displayModel.setConfigurations(PortalUtil._EXTERNAL_PROPERTY_JSON);
 			} */
-			Page page = siteDisplay.getPageMap().get(servletPath);
+			Page page = siteDisplay.getPageMap().get(currentPagePath);
 			if (page == null) {
 				log.warn("not found page: {}", servletPath);
 				return Mono.just(render404());
@@ -135,7 +138,9 @@ public class ViewRenderController {
 
 			ViewTemplate viewTemplate = siteDisplay.getViewTemplateMap().get(page.getViewTemplateId());
 
-			String pageTemplate = viewTemplate.getTemplateName();
+		
+			String pageTemplate = viewTemplate.getTemplateLocation().equals("on_file") ? pageTemplate = "viewtemplates/" +  viewTemplate.getTemplateName() : "TODO Load from DB";
+			
 
 			/* if (GetterUtil.getBoolean(PropKey.getKeyMap().get(PropKey.FLEXCORE_PORTAL_WEB_THEME_PRELOAD))) {
 				String tmp = PortalConstant.WORK_FOLDER + StringPool.SLASH + PortalConstant.RUNTIME_FOLDER
